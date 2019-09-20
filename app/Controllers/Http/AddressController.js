@@ -9,8 +9,15 @@ class AddressController {
   }
 
   async store ({ request, auth }) {
-    const data = request.only(['name', 'last_name', 'cpf', 'gender', 'email', 'phone1', 'phone2'])
-    data.active = true
+    const data = request.only([
+      'street',
+      'number',
+      'district',
+      'complement',
+      'city',
+      'state',
+      'country',
+      'zip'])
     // data.creator_id = auth.user ? auth.user.id : 1
     const address = await Address.create({ ...data })
     return address
@@ -23,7 +30,15 @@ class AddressController {
   }
 
   async update ({ params, request }) {
-    const data = request.only(['name', 'last_name', 'cpf', 'gender', 'email', 'phone1', 'phone2'])
+    const data = request.only([
+      'street',
+      'number',
+      'district',
+      'complement',
+      'city',
+      'state',
+      'country',
+      'zip'])
     const address = await Address.findOrFail(params.id)
     address.merge(data)
     await address.save()

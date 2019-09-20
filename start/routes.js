@@ -17,6 +17,10 @@ Route.post('files', 'FileController.store')
 Route.resource('clients', 'ClientController').apiOnly()
 // Equipments
 Route.resource('equipments', 'EquipmentController').apiOnly()
+// Addresses
+Route.resource('address', 'AddressController').apiOnly()
+// Diagnostics
+Route.resource('diagnostic', 'DiagnosticController').apiOnly()
 // Auth routes
 Route.group(() => {
   // Put here all secured routes

@@ -8,10 +8,9 @@ class DiagStatusController {
     return diagStatus
   }
 
-  async store ({ request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
-    data.active = true
-    // data.creator_id = auth.user ? auth.user.id : 1
+  async store ({ request, auth }) {
+    const data = request.only(['name', 'diag_title', 'diag_description', 'diag_obs'])
+    data.diag_creator_id = auth.user ? auth.user.id : 1
     const diagStatus = await DiagStatus.create({ ...data })
     return diagStatus
   }
