@@ -4,15 +4,16 @@ const Store = use('App/Models/Store')
 
 class StoreController {
   async index () {
-    const store = await Store.query()/* .with('user') */.fetch()
+    const store = await Store.query().with('address').fetch()
     return store
   }
 
-  async store ({ request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
+  async store ({ request, auth }) {
+    const data = request.only(['name', 'cnpj', 'email', 'phone1', 'phone2', 'vip_level', 'owner_id', 'address_id'])
     data.active = true
-    // data.creator_id = auth.user ? auth.user.id : 1
-    const store = await Store.create({ ...data })
+    data.creator_id = auth.user ? auth.user.id : 1
+    console.log(data)
+    const store = await Store.create(data)
     return store
   }
 
@@ -23,7 +24,7 @@ class StoreController {
   }
 
   async update ({ params, request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
+    const data = request.only(['name', 'cnpj', 'email', 'phone1', 'phone2', 'vip_level', 'onwer_id', 'address_id'])
     const store = await Store.findOrFail(params.id)
     store.merge(data)
     await store.save()

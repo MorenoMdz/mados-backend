@@ -8,10 +8,9 @@ class RepairStatusController {
     return repairStatus
   }
 
-  async store ({ request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
-    data.active = true
-    // data.creator_id = auth.user ? auth.user.id : 1
+  async store ({ request, auth }) {
+    const data = request.only(['title', 'description'])
+    data.creator_id = auth.user ? auth.user.id : 1
     const repairStatus = await RepairStatus.create({ ...data })
     return repairStatus
   }
@@ -23,7 +22,7 @@ class RepairStatusController {
   }
 
   async update ({ params, request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
+    const data = request.only(['title', 'description'])
     const repairStatus = await RepairStatus.findOrFail(params.id)
     repairStatus.merge(data)
     await repairStatus.save()

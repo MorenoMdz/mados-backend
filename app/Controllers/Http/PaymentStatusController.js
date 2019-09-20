@@ -7,10 +7,9 @@ class PaymentStatusController {
     return paymentStatus
   }
 
-  async store ({ request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
-    data.active = true
-    // data.creator_id = auth.user ? auth.user.id : 1
+  async store ({ request, auth }) {
+    const data = request.only(['title', 'description'])
+    data.creator_id = auth.user ? auth.user.id : 1
     const paymentStatus = await PaymentStatus.create({ ...data })
     return paymentStatus
   }
@@ -22,7 +21,7 @@ class PaymentStatusController {
   }
 
   async update ({ params, request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
+    const data = request.only(['title', 'description'])
     const paymentStatus = await PaymentStatus.findOrFail(params.id)
     paymentStatus.merge(data)
     await paymentStatus.save()

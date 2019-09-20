@@ -11,6 +11,10 @@ class Address extends Model {
   client () {
     return this.belongsTo('App/Models/Client')
   }
+
+  store () {
+    return this.belongsTo('App/Models/Client')
+  }
 }
 
 module.exports = Address

@@ -7,10 +7,9 @@ class PriorityController {
     return priority
   }
 
-  async store ({ request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
-    data.active = true
-    // data.creator_id = auth.user ? auth.user.id : 1
+  async store ({ request, auth }) {
+    const data = request.only(['title', 'description'])
+    data.creator_id = auth.user ? auth.user.id : 1
     const priority = await Priority.create({ ...data })
     return priority
   }
@@ -22,7 +21,7 @@ class PriorityController {
   }
 
   async update ({ params, request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
+    const data = request.only(['title', 'description'])
     const priority = await Priority.findOrFail(params.id)
     priority.merge(data)
     await priority.save()

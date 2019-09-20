@@ -8,10 +8,9 @@ class RepairController {
     return repair
   }
 
-  async store ({ request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
-    data.active = true
-    // data.creator_id = auth.user ? auth.user.id : 1
+  async store ({ request, auth }) {
+    const data = request.only(['title', 'description', 'obs'])
+    data.creator_id = auth.user ? auth.user.id : 1
     const repair = await Repair.create({ ...data })
     return repair
   }

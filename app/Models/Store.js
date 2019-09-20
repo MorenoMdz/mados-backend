@@ -4,12 +4,16 @@
 const Model = use('Model')
 
 class Store extends Model {
-  user () {
+  users () {
     return this.belongsTo('App/Models/User')
   }
 
   serviceOrder () {
     return this.hasMany('App/Models/ServiceOrder')
+  }
+
+  address () {
+    return this.hasOne('App/Models/ServiceOrder')
   }
 }
 

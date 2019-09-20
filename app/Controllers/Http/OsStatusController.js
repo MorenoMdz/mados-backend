@@ -7,10 +7,9 @@ class OsStatusController {
     return osStatus
   }
 
-  async store ({ request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
-    data.active = true
-    // data.creator_id = auth.user ? auth.user.id : 1
+  async store ({ request, auth }) {
+    const data = request.only(['title', 'description'])
+    data.creator_id = auth.user ? auth.user.id : 1
     const osStatus = await OsStatus.create({ ...data })
     return osStatus
   }
@@ -22,7 +21,7 @@ class OsStatusController {
   }
 
   async update ({ params, request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
+    const data = request.only(['title', 'description'])
     const osStatus = await OsStatus.findOrFail(params.id)
     osStatus.merge(data)
     await osStatus.save()

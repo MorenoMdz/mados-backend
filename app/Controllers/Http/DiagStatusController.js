@@ -9,8 +9,8 @@ class DiagStatusController {
   }
 
   async store ({ request, auth }) {
-    const data = request.only(['name', 'diag_title', 'diag_description', 'diag_obs'])
-    data.diag_creator_id = auth.user ? auth.user.id : 1
+    const data = request.only(['title', 'description'])
+    data.creator_id = auth.user ? auth.user.id : 1
     const diagStatus = await DiagStatus.create({ ...data })
     return diagStatus
   }
@@ -22,7 +22,7 @@ class DiagStatusController {
   }
 
   async update ({ params, request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
+    const data = request.only(['title', 'description'])
     const diagStatus = await DiagStatus.findOrFail(params.id)
     diagStatus.merge(data)
     await diagStatus.save()
