@@ -4,7 +4,7 @@ const DiagStatus = use('App/Models/DiagStatus')
 
 class DiagStatusController {
   async index () {
-    const diagStatus = await DiagStatus.query()/* .with('user') */.fetch()
+    const diagStatus = await DiagStatus.query().fetch()
     return diagStatus
   }
 

@@ -21,7 +21,17 @@ class ServiceOrderController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    const so = await ServiceOrder.query().with('address').with('user').fetch()
+    const so = await ServiceOrder.query()
+      .with('creator')
+      .with('client')
+      .with('store')
+      .with('equipment')
+      .with('priority')
+      .with('osStatus')
+      .with('diagStatus')
+      .with('repairStatus')
+      .with('paymentStatus')
+      .fetch()
     return so
   }
 
@@ -44,6 +54,7 @@ class ServiceOrderController {
       'os_number',
       'os_type',
       'os_status_id',
+      'priority_id',
       'diag_status_id',
       'problem_description',
       'repair_status_id',
@@ -54,7 +65,7 @@ class ServiceOrderController {
       'delivery_date',
       'warranty',
       'received_by'])
-    data.active = true
+    // data.active = true
     data.creator_id = auth.user ? auth.user.id : 1
     const serviceOrder = await ServiceOrder.create(data)
 

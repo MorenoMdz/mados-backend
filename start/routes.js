@@ -24,6 +24,8 @@ Route.resource('diagnostic', 'DiagnosticController').apiOnly()
 // Diagnostic Status
 Route.resource('diagstatus', 'DiagStatusController').apiOnly()
 // SO Status
+Route.resource('repairstatus', 'RepairStatusController').apiOnly()
+// SO Status
 Route.resource('osstatus', 'OsStatusController').apiOnly()
 // Payment Status
 Route.resource('paymentstatus', 'PaymentStatusController').apiOnly()

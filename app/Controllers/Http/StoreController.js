@@ -4,8 +4,7 @@ const Store = use('App/Models/Store')
 
 class StoreController {
   async index () {
-    const store = await Store.query().with('address').with('user').fetch()
-
+    const store = await Store.query().with('address').with('creator').fetch()
     return store
   }
 
