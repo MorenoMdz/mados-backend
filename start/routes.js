@@ -27,12 +27,16 @@ Route.resource('diagstatus', 'DiagStatusController').apiOnly()
 Route.resource('osstatus', 'OsStatusController').apiOnly()
 // Payment Status
 Route.resource('paymentstatus', 'PaymentStatusController').apiOnly()
-// Priorities Status
+// Priorities
 Route.resource('priorities', 'PriorityController').apiOnly()
-// Repairs Status
+// Repairs
 Route.resource('repairs', 'RepairController').apiOnly()
-// Stores Status
+// Stores
 Route.resource('stores', 'StoreController').apiOnly()
+// System
+Route.resource('systems', 'SystemController').apiOnly()
+// Service Order routes
+Route.resource('serviceorders', 'ServiceOrderController').apiOnly()
 // Auth routes
 Route.group(() => {
   // Put here all secured routes

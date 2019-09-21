@@ -4,12 +4,12 @@
 const Model = use('Model')
 
 class System extends Model {
-  user () {
-    return this.belongsTo('App/Models/User')
+  creator () {
+    return this.belongsTo('App/Models/User', 'creator_id', 'id')
   }
 
-  store () {
-    return this.hasMany('App/Models/Store')
+  owner () {
+    return this.belongsTo('App/Models/User', 'owner_id', 'id')
   }
 }
 

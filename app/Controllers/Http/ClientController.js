@@ -4,7 +4,7 @@ const Client = use('App/Models/Client')
 
 class ClientController {
   async index () {
-    const clients = await Client.query()/* .with('user') */.fetch()
+    const clients = await Client.query().with('address').fetch()
     return clients
   }
 

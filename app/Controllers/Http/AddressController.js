@@ -17,8 +17,12 @@ class AddressController {
       'city',
       'state',
       'country',
-      'zip'])
-    // data.creator_id = auth.user ? auth.user.id : 1
+      'zip',
+      'store_id',
+      'client_id',
+      'system_id'
+    ])
+    data.user_id = auth.user ? auth.user.id : 1
     const address = await Address.create({ ...data })
     return address
   }
@@ -38,7 +42,11 @@ class AddressController {
       'city',
       'state',
       'country',
-      'zip'])
+      'zip',
+      'store_id',
+      'client_id',
+      'system_id'
+    ])
     const address = await Address.findOrFail(params.id)
     address.merge(data)
     await address.save()

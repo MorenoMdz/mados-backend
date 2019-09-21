@@ -4,8 +4,8 @@
 const Model = use('Model')
 
 class Store extends Model {
-  users () {
-    return this.belongsTo('App/Models/User')
+  creator () {
+    return this.belongsTo('App/Models/User', 'creator_id', 'id')
   }
 
   serviceOrder () {
@@ -13,7 +13,7 @@ class Store extends Model {
   }
 
   address () {
-    return this.hasOne('App/Models/ServiceOrder')
+    return this.hasOne('App/Models/Address')
   }
 }
 

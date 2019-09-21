@@ -4,14 +4,14 @@ const System = use('App/Models/System')
 
 class SystemController {
   async index () {
-    const system = await System.query()/* .with('user') */.fetch()
+    const system = await System.query().with('creator').with('owner').fetch()
     return system
   }
 
-  async store ({ request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
+  async store ({ request, auth }) {
+    const data = request.only(['name', 'email', 'information', 'obs', 'owner_id', 'subscription_id'])
     data.active = true
-    // data.creator_id = auth.user ? auth.user.id : 1
+    data.creator_id = auth.user ? auth.user.id : 1
     const system = await System.create({ ...data })
     return system
   }
@@ -23,7 +23,7 @@ class SystemController {
   }
 
   async update ({ params, request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs'])
+    const data = request.only(['name', 'email', 'information', 'obs', 'owner_id', 'subscription_id', 'active'])
     const system = await System.findOrFail(params.id)
     system.merge(data)
     await system.save()

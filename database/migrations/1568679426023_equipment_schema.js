@@ -7,7 +7,7 @@ class EquipmentSchema extends Schema {
   up () {
     this.create('equipment', (table) => {
       table.increments()
-      table.integer('creator_id')
+      table.integer('creator_id').unsigned().references('id').inTable('users').onUpdate('cascade').onDelete('set null')
       table.string('active')
       table.string('name')
       table.string('brand')

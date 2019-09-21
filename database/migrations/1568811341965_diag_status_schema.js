@@ -7,6 +7,7 @@ class DiagStatusSchema extends Schema {
   up () {
     this.create('diag_statuses', (table) => {
       table.increments()
+      table.integer('creator_id').unsigned().references('id').inTable('users').onUpdate('cascade').onDelete('set null')
       table.string('title').notNullable()
       table.text('description')
       table.timestamps()

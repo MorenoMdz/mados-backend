@@ -13,7 +13,7 @@ class Address extends Model {
   }
 
   store () {
-    return this.belongsTo('App/Models/Client')
+    return this.belongsTo('App/Models/Store')
   }
 }
 

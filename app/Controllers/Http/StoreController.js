@@ -4,7 +4,8 @@ const Store = use('App/Models/Store')
 
 class StoreController {
   async index () {
-    const store = await Store.query().with('address').fetch()
+    const store = await Store.query().with('address').with('user').fetch()
+
     return store
   }
 
@@ -12,7 +13,6 @@ class StoreController {
     const data = request.only(['name', 'cnpj', 'email', 'phone1', 'phone2', 'vip_level', 'owner_id', 'address_id'])
     data.active = true
     data.creator_id = auth.user ? auth.user.id : 1
-    console.log(data)
     const store = await Store.create(data)
     return store
   }
