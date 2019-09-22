@@ -1,14 +1,13 @@
-
-
-const Address = use('App/Models/Address')
+const Address = use('App/Models/Address');
 
 class AddressController {
-  async index () {
-    const address = await Address.query()/* .with('user') */.fetch()
-    return address
+  async index() {
+    const address = await Address.query() /* .with('user') */
+      .fetch();
+    return address;
   }
 
-  async store ({ request, auth }) {
+  async store({ request, auth }) {
     const data = request.only([
       'street',
       'number',
@@ -20,20 +19,20 @@ class AddressController {
       'zip',
       'store_id',
       'client_id',
-      'system_id'
-    ])
-    data.user_id = auth.user ? auth.user.id : 1
-    const address = await Address.create({ ...data })
-    return address
+      'system_id',
+    ]);
+    data.user_id = auth.user ? auth.user.id : 1;
+    const address = await Address.create({ ...data });
+    return address;
   }
 
-  async show ({ params }) {
-    const address = await Address.findOrFail(params.id)
+  async show({ params }) {
+    const address = await Address.findOrFail(params.id);
     // TODO load address orders
-    return address
+    return address;
   }
 
-  async update ({ params, request }) {
+  async update({ params, request }) {
     const data = request.only([
       'street',
       'number',
@@ -45,19 +44,21 @@ class AddressController {
       'zip',
       'store_id',
       'client_id',
-      'system_id'
-    ])
-    const address = await Address.findOrFail(params.id)
-    address.merge(data)
-    await address.save()
-    return address
+      'system_id',
+    ]);
+    const address = await Address.findOrFail(params.id);
+    address.merge(data);
+    await address.save();
+    return address;
   }
 
-  async destroy ({ params, response }) {
-    const address = await Address.findOrFail(params.id)
-    address.delete()
-    return response.status(200).send({ success: { message: 'address deleted' } })
+  async destroy({ params, response }) {
+    const address = await Address.findOrFail(params.id);
+    address.delete();
+    return response
+      .status(200)
+      .send({ success: { message: 'address deleted' } });
   }
 }
 
-module.exports = AddressController
+module.exports = AddressController;

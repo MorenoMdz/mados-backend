@@ -1,38 +1,40 @@
-
-const OsStatus = use('App/Models/OsStatus')
+const OsStatus = use('App/Models/OsStatus');
 
 class OsStatusController {
-  async index () {
-    const osStatus = await OsStatus.query()/* .with('user') */.fetch()
-    return osStatus
+  async index() {
+    const osStatus = await OsStatus.query() /* .with('user') */
+      .fetch();
+    return osStatus;
   }
 
-  async store ({ request, auth }) {
-    const data = request.only(['title', 'description'])
-    data.creator_id = auth.user ? auth.user.id : 1
-    const osStatus = await OsStatus.create({ ...data })
-    return osStatus
+  async store({ request, auth }) {
+    const data = request.only(['title', 'description']);
+    data.creator_id = auth.user ? auth.user.id : 1;
+    const osStatus = await OsStatus.create({ ...data });
+    return osStatus;
   }
 
-  async show ({ params }) {
-    const osStatus = await OsStatus.findOrFail(params.id)
+  async show({ params }) {
+    const osStatus = await OsStatus.findOrFail(params.id);
     // TODO load osStatus orders
-    return osStatus
+    return osStatus;
   }
 
-  async update ({ params, request }) {
-    const data = request.only(['title', 'description'])
-    const osStatus = await OsStatus.findOrFail(params.id)
-    osStatus.merge(data)
-    await osStatus.save()
-    return osStatus
+  async update({ params, request }) {
+    const data = request.only(['title', 'description']);
+    const osStatus = await OsStatus.findOrFail(params.id);
+    osStatus.merge(data);
+    await osStatus.save();
+    return osStatus;
   }
 
-  async destroy ({ params, response }) {
-    const osStatus = await OsStatus.findOrFail(params.id)
-    osStatus.delete()
-    return response.status(200).send({ success: { message: 'osStatus deleted' } })
+  async destroy({ params, response }) {
+    const osStatus = await OsStatus.findOrFail(params.id);
+    osStatus.delete();
+    return response
+      .status(200)
+      .send({ success: { message: 'osStatus deleted' } });
   }
 }
 
-module.exports = OsStatusController
+module.exports = OsStatusController;

@@ -1,26 +1,26 @@
-const { test, trait, beforeEach, afterEach } = use('Test/Suite')('Address')
-const Mail = use('Mail')
-const User = use('App/Models/User')
-const Address = use('App/Models/Address')
+const { test, trait, beforeEach, afterEach } = use('Test/Suite')('Address');
+const Mail = use('Mail');
+const User = use('App/Models/User');
+const Address = use('App/Models/Address');
 
-trait('Auth/Client')
-trait('Test/ApiClient')
+trait('Auth/Client');
+trait('Test/ApiClient');
 
 beforeEach(async () => {
-  await User.query().delete()
-  await Address.query().delete()
-  Mail.fake()
-})
+  await User.query().delete();
+  await Address.query().delete();
+  Mail.fake();
+});
 
 afterEach(async () => {
-  Mail.restore()
-})
+  Mail.restore();
+});
 
 test('it should list no address', async ({ client }) => {
-  const response = await client.get('/address').end()
-  response.assertStatus(200)
-  response.assertJSON([])
-})
+  const response = await client.get('/address').end();
+  response.assertStatus(200);
+  response.assertJSON([]);
+});
 
 test('it should list all addresses', async ({ client }) => {
   // const address = await Address.create({
@@ -34,19 +34,19 @@ test('it should list all addresses', async ({ client }) => {
   //   zip: '88010300'
   // })
 
-  const response = await client.get('/address').end()
-  response.assertStatus(200)
-  response.assertJSONSubset([{
-    // street: 'street',
-    // number: '123',
-    // district: 'chinatown',
-    // complement: 'none',
-    // city: 'fpolis',
-    // state: 'sc',
-    // country: 'Brazil',
-    // zip: '88010300'
-  }])
-})
+  const response = await client.get('/address').end();
+  response.assertStatus(200);
+  // response.assertJSONSubset([{
+  //   // street: 'street',
+  //   // number: '123',
+  //   // district: 'chinatown',
+  //   // complement: 'none',
+  //   // city: 'fpolis',
+  //   // state: 'sc',
+  //   // country: 'Brazil',
+  //   // zip: '88010300'
+  // }])
+});
 
 test('it should save a new address', async (/* { client } */) => {
   // const user = await User.create({
@@ -64,7 +64,6 @@ test('it should save a new address', async (/* { client } */) => {
   //   country: 'Brazil',
   //   zip: '88010300'
   // }).end()
-
   // response.assertStatus(200)
   // response.assertJSONSubset([{ a: 'a' }])
-})
+});

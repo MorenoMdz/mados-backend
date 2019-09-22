@@ -1,5 +1,3 @@
-
-
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -8,7 +6,7 @@
  * Resourceful controller for interacting with serviceorders
  */
 
-const ServiceOrder = use('App/Models/ServiceOrder')
+const ServiceOrder = use('App/Models/ServiceOrder');
 
 class ServiceOrderController {
   /**
@@ -20,7 +18,7 @@ class ServiceOrderController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index () {
+  async index() {
     const serviceOrder = await ServiceOrder.query()
       .with('creator')
       .with('client')
@@ -31,8 +29,8 @@ class ServiceOrderController {
       .with('diagStatus')
       .with('repairStatus')
       .with('paymentStatus')
-      .fetch()
-    return serviceOrder
+      .fetch();
+    return serviceOrder;
   }
 
   /**
@@ -43,8 +41,9 @@ class ServiceOrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, auth }) {
-    const data = request.only(['creator_id',
+  async store({ request, auth }) {
+    const data = request.only([
+      'creator_id',
       'client_id',
       'store_id',
       'equipment_id',
@@ -64,15 +63,16 @@ class ServiceOrderController {
       'paid_value',
       'delivery_date',
       'warranty',
-      'received_by'])
+      'received_by',
+    ]);
     // data.active = true
-    data.creator_id = auth.user ? auth.user.id : 1
-    const serviceOrder = await ServiceOrder.create(data)
-    return serviceOrder
+    data.creator_id = auth.user ? auth.user.id : 1;
+    const serviceOrder = await ServiceOrder.create(data);
+    return serviceOrder;
   }
 
-  async show ({ params }) {
-    const serviceOrder = await ServiceOrder.findOrFail(params.id)
+  async show({ params }) {
+    const serviceOrder = await ServiceOrder.findOrFail(params.id);
     await serviceOrder.loadMany([
       'creator',
       'client',
@@ -82,10 +82,10 @@ class ServiceOrderController {
       'osStatus',
       'diagStatus',
       'repairStatus',
-      'paymentStatus'
-    ])
+      'paymentStatus',
+    ]);
     // TODO load serviceOrder orders
-    return serviceOrder
+    return serviceOrder;
   }
 
   /**
@@ -96,8 +96,9 @@ class ServiceOrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request,  }) {
-    const data = request.only(['creator_id',
+  async update({ params, request }) {
+    const data = request.only([
+      'creator_id',
       'client_id',
       'store_id',
       'equipment_id',
@@ -117,11 +118,12 @@ class ServiceOrderController {
       'paid_value',
       'delivery_date',
       'warranty',
-      'received_by'])
-    const serviceOrder = await ServiceOrder.findOrFail(params.id)
-    serviceOrder.merge(data)
-    await serviceOrder.save()
-    return serviceOrder
+      'received_by',
+    ]);
+    const serviceOrder = await ServiceOrder.findOrFail(params.id);
+    serviceOrder.merge(data);
+    await serviceOrder.save();
+    return serviceOrder;
   }
 
   /**
@@ -132,11 +134,13 @@ class ServiceOrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, response }) {
-    const serviceOrder = await ServiceOrder.findOrFail(params.id)
-    serviceOrder.delete()
-    return response.status(200).send({ success: { message: 'serviceOrder deleted' } })
+  async destroy({ params, response }) {
+    const serviceOrder = await ServiceOrder.findOrFail(params.id);
+    serviceOrder.delete();
+    return response
+      .status(200)
+      .send({ success: { message: 'serviceOrder deleted' } });
   }
 }
 
-module.exports = ServiceOrderController
+module.exports = ServiceOrderController;

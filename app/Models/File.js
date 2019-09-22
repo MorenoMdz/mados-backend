@@ -1,21 +1,19 @@
-
-
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Model = use('Model')
-const Env = use('Env')
+const Model = use('Model');
+const Env = use('Env');
 
 class File extends Model {
-  static get computed () {
-    return ['url']
+  static get computed() {
+    return ['url'];
   }
 
-  getUrl ({ id }) {
-    return `${Env.get('APP_URL')}/files/${id}`
+  getUrl({ id }) {
+    return `${Env.get('APP_URL')}/files/${id}`;
   }
 
-  user () {
-    return this.belongsTo('App/Models/User')
+  user() {
+    return this.belongsTo('App/Models/User');
   }
 }
 
-module.exports = File
+module.exports = File;

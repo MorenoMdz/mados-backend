@@ -1,9 +1,6 @@
-
-
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Model = use('Model')
+const Model = use('Model');
 
-class DiagStatus extends Model {
-}
+class DiagStatus extends Model {}
 
-module.exports = DiagStatus
+module.exports = DiagStatus;
