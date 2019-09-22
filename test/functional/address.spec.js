@@ -16,13 +16,13 @@ afterEach(async () => {
   Mail.restore()
 })
 
-test('should list no address', async ({ client }) => {
+test('it should list no address', async ({ client }) => {
   const response = await client.get('/address').end()
   response.assertStatus(200)
   response.assertJSON([])
 })
 
-test('should list all address', async ({ client }) => {
+test('it should list all addresses', async ({ client }) => {
   const address = await Address.create({
     street: 'street',
     number: '123',
@@ -36,19 +36,19 @@ test('should list all address', async ({ client }) => {
 
   const response = await client.get('/address').end()
   response.assertStatus(200)
-  response.assertJSONSubset([{}])
-
-  // street: 'street',
-  // number: '123',
-  // district: 'chinatown',
-  // complement: 'none',
-  // city: 'fpolis',
-  // state: 'sc',
-  // country: 'Brazil',
-  // zip: '88010300'
+  response.assertJSONSubset([{
+    // street: 'street',
+    // number: '123',
+    // district: 'chinatown',
+    // complement: 'none',
+    // city: 'fpolis',
+    // state: 'sc',
+    // country: 'Brazil',
+    // zip: '88010300'
+  }])
 })
 
-test('should save a new address', async ({ client }) => {
+test('it should save a new address', async ({ client }) => {
   const user = await User.create({
     username: 'teste user',
     email: 'm3@m.com',

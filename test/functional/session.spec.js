@@ -18,7 +18,7 @@ afterEach(async () => {
   Mail.restore()
 })
 
-test('should return WT token when auth', async ({ assert, client }) => {
+test('it should return JWT token when auth', async ({ assert, client }) => {
   const sessionPayload = {
     email: 'm3@m.com',
     password: '123'
