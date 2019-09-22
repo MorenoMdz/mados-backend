@@ -1,4 +1,4 @@
-'use strict'
+
 
 const System = use('App/Models/System')
 

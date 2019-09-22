@@ -1,4 +1,4 @@
-'use strict'
+
 const PaymentStatus = use('App/Models/PaymentStatus')
 
 class PaymentStatusController {

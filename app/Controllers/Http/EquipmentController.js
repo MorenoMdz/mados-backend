@@ -1,4 +1,4 @@
-'use strict'
+
 
 const Equipment = use('App/Models/Equipment')
 

@@ -1,4 +1,4 @@
-'use strict'
+
 
 const Store = use('App/Models/Store')
 

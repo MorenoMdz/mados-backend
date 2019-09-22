@@ -1,4 +1,4 @@
-'use strict'
+
 
 const File = use('App/Models/File')
 const Helpers = use('Helpers')
@@ -34,11 +34,11 @@ class FileController {
     }
   }
 
-  async update ({ params, request, response }) {
-  }
+  // async update () {
+  // }
 
-  async destroy ({ params, request, response }) {
-  }
+  // async destroy () {
+  // }
 }
 
 module.exports = FileController

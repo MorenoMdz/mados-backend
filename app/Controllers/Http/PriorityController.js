@@ -1,4 +1,4 @@
-'use strict'
+
 const Priority = use('App/Models/Priority')
 
 class PriorityController {

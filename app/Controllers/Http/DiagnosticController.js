@@ -1,4 +1,4 @@
-'use strict'
+
 
 const Diagnostic = use('App/Models/Diagnostic')
 

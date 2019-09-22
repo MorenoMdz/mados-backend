@@ -1,7 +1,6 @@
 const {
   test, trait, beforeEach, afterEach
 } = use('Test/Suite')('Session')
-const Factory = use('Factory')
 
 const Mail = use('Mail')
 const User = use('App/Models/User')
@@ -23,7 +22,7 @@ test('it should return JWT token when auth', async ({ assert, client }) => {
     email: 'm3@m.com',
     password: '123'
   }
-  const user = await Factory.model('App/Models/User').create(sessionPayload)
+  // const user = await Factory.model('App/Models/User').create(sessionPayload)
   const response = await client.post('/sessions').send(sessionPayload).end()
 
   response.assertStatus(200)

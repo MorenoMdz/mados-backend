@@ -1,4 +1,4 @@
-'use strict'
+
 
 class ConvertEmptyStringsToNull {
   async handle ({ request }, next) {

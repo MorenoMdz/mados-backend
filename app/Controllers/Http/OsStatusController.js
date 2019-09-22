@@ -1,4 +1,4 @@
-'use strict'
+
 const OsStatus = use('App/Models/OsStatus')
 
 class OsStatusController {

@@ -40,7 +40,7 @@ test('should not create an User if no data is provided', async ({ client, assert
 })
 
 // todo test user already exists
-test('should not create an User if email is already in use', async ({ client, assert }) => {
+test('should not create an User if email is already in use', async ({ client }) => {
   const response = await client.post('/users').send({
     username: 'teste user',
     email: 'm3@m.com',
@@ -61,7 +61,7 @@ test('should not create an User if email is already in use', async ({ client, as
   responseUser.assertStatus(500)
 })
 
-test('should not create an User if user is already in use', async ({ client, assert }) => {
+test('should not create an User if user is already in use', async ({ client }) => {
   const response = await client.post('/users').send({
     username: 'teste user',
     email: 'm3@m.com',

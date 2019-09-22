@@ -1,4 +1,4 @@
-'use strict'
+
 
 const Repair = use('App/Models/Repair')
 

@@ -1,4 +1,4 @@
-'use strict'
+
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -20,7 +20,7 @@ class ServiceOrderController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index () {
     const serviceOrder = await ServiceOrder.query()
       .with('creator')
       .with('client')
@@ -96,7 +96,7 @@ class ServiceOrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request,  }) {
     const data = request.only(['creator_id',
       'client_id',
       'store_id',
@@ -132,7 +132,7 @@ class ServiceOrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, response }) {
     const serviceOrder = await ServiceOrder.findOrFail(params.id)
     serviceOrder.delete()
     return response.status(200).send({ success: { message: 'serviceOrder deleted' } })

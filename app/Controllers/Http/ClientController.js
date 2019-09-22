@@ -1,4 +1,4 @@
-'use strict'
+
 
 const Client = use('App/Models/Client')
 
@@ -8,7 +8,7 @@ class ClientController {
     return clients
   }
 
-  async store ({ request, auth }) {
+  async store ({ request }) {
     const data = request.only(['name', 'last_name', 'cpf', 'gender', 'email', 'phone1', 'phone2'])
     data.active = true
     // data.creator_id = auth.user ? auth.user.id : 1
