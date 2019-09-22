@@ -21,7 +21,7 @@ class ServiceOrderController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    const so = await ServiceOrder.query()
+    const serviceOrder = await ServiceOrder.query()
       .with('creator')
       .with('client')
       .with('store')
@@ -32,7 +32,7 @@ class ServiceOrderController {
       .with('repairStatus')
       .with('paymentStatus')
       .fetch()
-    return so
+    return serviceOrder
   }
 
   /**
@@ -68,75 +68,24 @@ class ServiceOrderController {
     // data.active = true
     data.creator_id = auth.user ? auth.user.id : 1
     const serviceOrder = await ServiceOrder.create(data)
-
-    // const query = {
-    //   "creator_id": 1,
-    //   "client_id": 1,
-    //   "store_id": 1,
-    //   "equipment_id": 1,
-    //   "serial_number": "abc123",
-    //   "equipment_model": "abc",
-    //   "accessories": "abc",
-    //   "os_number": "A000123",
-    //   "os_type": "type 1",
-    //   "os_status_id": 1,
-    //   "diag_status_id": 1,
-    //   "problem_description": "problem description 1'",
-    //   "repair_status_id": 1,
-    //   "observation": "os observation 1",
-    //   "payment_status_id": 1,
-    //   "payment_type": "type 1",
-    //   "paid_value": 123,
-    //   "delivery_date": "11/11/2011",
-    //   "warranty": "90 days",
-    //   "received_by": "john doe",
-
-    //   "creator_id",
-    //   "client_id",
-    //   "store_id",
-    //   "equipment_id",
-    //   "serial_number",
-    //   "equipment_model",
-    //   "accessories",
-    //   "os_number",
-    //   "os_type",
-    //   "os_status_id",
-    //   "diag_status_id",
-    //   "problem_description",
-    //   "repair_status_id",
-    //   "observation",
-    //   "payment_status_id",
-    //   "payment_type",
-    //   "paid_value",
-    //   "delivery_date",
-    //   "warranty",
-    //   "received_by",
-    // }
     return serviceOrder
   }
 
-  /**
-   * Display a single serviceorder.
-   * GET serviceorders/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing serviceorder.
-   * GET serviceorders/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+  async show ({ params }) {
+    const serviceOrder = await ServiceOrder.findOrFail(params.id)
+    await serviceOrder.loadMany([
+      'creator',
+      'client',
+      'store',
+      'equipment',
+      'priority',
+      'osStatus',
+      'diagStatus',
+      'repairStatus',
+      'paymentStatus'
+    ])
+    // TODO load serviceOrder orders
+    return serviceOrder
   }
 
   /**
@@ -148,6 +97,31 @@ class ServiceOrderController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    const data = request.only(['creator_id',
+      'client_id',
+      'store_id',
+      'equipment_id',
+      'serial_number',
+      'equipment_model',
+      'accessories',
+      'os_number',
+      'os_type',
+      'os_status_id',
+      'priority_id',
+      'diag_status_id',
+      'problem_description',
+      'repair_status_id',
+      'observation',
+      'payment_status_id',
+      'payment_type',
+      'paid_value',
+      'delivery_date',
+      'warranty',
+      'received_by'])
+    const serviceOrder = await ServiceOrder.findOrFail(params.id)
+    serviceOrder.merge(data)
+    await serviceOrder.save()
+    return serviceOrder
   }
 
   /**
@@ -159,6 +133,9 @@ class ServiceOrderController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+    const serviceOrder = await ServiceOrder.findOrFail(params.id)
+    serviceOrder.delete()
+    return response.status(200).send({ success: { message: 'serviceOrder deleted' } })
   }
 }
 

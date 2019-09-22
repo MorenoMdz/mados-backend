@@ -1,6 +1,7 @@
 'use strict'
 
 const User = use('App/Models/User')
+const Mail = use('Mail')
 
 class UserController {
   async index () {
@@ -11,6 +12,12 @@ class UserController {
   async store ({ request }) {
     const data = request.only(['username', 'email', 'password'])
     const user = await User.create(data)
+    await Mail.send('emails.welcome', user.toJSON(), (message) => {
+      message
+        .to(user.email)
+        .from('admin@mados.tech')
+        .subject('Welcome new User')
+    })
     return user
   }
 
