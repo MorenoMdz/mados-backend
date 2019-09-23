@@ -4,7 +4,7 @@ Route.get('/', () => {
   return { greeting: 'Hello world from MadOs' };
 });
 // User & Auth Routes
-Route.post('users', 'UserController.store');
+Route.post('users', 'UserController.store').validator('User');
 Route.post('sessions', 'SessionController.store').validator('Session');
 Route.post('forgot', 'ForgotPasswordController.store').validator('Forgot');
 Route.put('forgot', 'ForgotPasswordController.update').validator('Reset');

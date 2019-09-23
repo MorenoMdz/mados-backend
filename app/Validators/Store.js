@@ -1,3 +1,5 @@
+const Antl = use('Antl');
+
 class Store {
   get validateAll() {
     return true;
@@ -12,6 +14,10 @@ class Store {
       active: 'required',
       owner_id: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 

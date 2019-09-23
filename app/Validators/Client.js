@@ -1,3 +1,4 @@
+const Antl = use('Antl');
 class Client {
   get validateAll() {
     return true;
@@ -9,6 +10,10 @@ class Client {
       last_name: 'required',
       gender: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 

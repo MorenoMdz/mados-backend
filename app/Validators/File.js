@@ -1,3 +1,5 @@
+const Antl = use('Antl');
+
 class File {
   get validateAll() {
     return true;
@@ -7,6 +9,10 @@ class File {
     return {
       file: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 

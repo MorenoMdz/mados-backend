@@ -1,3 +1,4 @@
+const Antl = use('Antl');
 class Equipment {
   get validateAll() {
     return true;
@@ -8,6 +9,10 @@ class Equipment {
       name: 'required|unique:equipment',
       brand: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 

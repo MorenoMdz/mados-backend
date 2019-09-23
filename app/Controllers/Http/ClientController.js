@@ -1,10 +1,11 @@
 const Client = use('App/Models/Client');
 
 class ClientController {
-  async index() {
+  async index({ request }) {
+    const { page } = request.get();
     const clients = await Client.query()
       .with('address')
-      .fetch();
+      .paginate(page);
     return clients;
   }
 

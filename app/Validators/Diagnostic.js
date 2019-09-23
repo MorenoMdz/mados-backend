@@ -1,3 +1,4 @@
+const Antl = use('Antl');
 class Diagnostic {
   get validateAll() {
     return true;
@@ -8,6 +9,10 @@ class Diagnostic {
       diag_title: 'required',
       diag_description: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 

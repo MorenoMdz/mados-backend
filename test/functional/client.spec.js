@@ -20,7 +20,13 @@ afterEach(async () => {
 test('it should list no clients', async ({ client }) => {
   const response = await client.get('/clients').end();
   response.assertStatus(200);
-  response.assertJSON([]);
+  response.assertJSONSubset({
+    total: '0',
+    perPage: 20,
+    page: 1,
+    lastPage: 0,
+    data: [],
+  });
 });
 
 test('it should list all clients', async ({ client }) => {
@@ -36,17 +42,25 @@ test('it should list all clients', async ({ client }) => {
   });
   const response = await client.get('/clients').end();
   response.assertStatus(200);
-  response.assertJSONSubset([
-    {
-      name: 'client_1',
-      last_name: 'client_1',
-      cpf: '123.123.123-33',
-      gender: 'F',
-      email: 't@t.com',
-      phone1: '123',
-      phone2: '123',
-    },
-  ]);
+  response.assertJSONSubset({
+    total: '1',
+    perPage: 20,
+    page: 1,
+    lastPage: 1,
+    data: [
+      {
+        active: true,
+        name: 'client_1',
+        last_name: 'client_1',
+        cpf: '123.123.123-33',
+        gender: 'F',
+        email: 't@t.com',
+        phone1: '123',
+        phone2: '123',
+        address: null,
+      },
+    ],
+  });
 });
 
 test('it should save a new client', async ({ client }) => {

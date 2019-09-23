@@ -1,3 +1,4 @@
+const Antl = use('Antl');
 class OsStatus {
   get validateAll() {
     return true;
@@ -8,6 +9,10 @@ class OsStatus {
       title: 'required',
       description: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 

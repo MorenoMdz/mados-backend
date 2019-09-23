@@ -1,3 +1,5 @@
+const Antl = use('Antl');
+
 class System {
   get validateAll() {
     return true;
@@ -10,6 +12,10 @@ class System {
       email: 'required',
       owner_id: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 

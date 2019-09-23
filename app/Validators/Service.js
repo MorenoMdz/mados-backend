@@ -1,3 +1,5 @@
+const Antl = use('Antl');
+
 class Service {
   get validateAll() {
     return true;
@@ -15,6 +17,10 @@ class Service {
       os_type: 'required',
       problem_description: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 

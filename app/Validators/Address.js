@@ -1,5 +1,4 @@
-
-
+const Antl = use('Antl');
 class Address {
   get validateAll() {
     return true;
@@ -15,6 +14,10 @@ class Address {
       country: 'required',
       zip: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 

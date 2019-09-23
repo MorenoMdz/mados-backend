@@ -1,3 +1,4 @@
+const Antl = use('Antl');
 class PaymentStatus {
   get validateAll() {
     return true;
@@ -8,6 +9,10 @@ class PaymentStatus {
       title: 'required',
       description: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 

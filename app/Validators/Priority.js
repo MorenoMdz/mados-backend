@@ -1,4 +1,4 @@
-
+const Antl = use('Antl');
 
 class Priority {
   get validateAll() {
@@ -10,6 +10,10 @@ class Priority {
       title: 'required',
       description: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 

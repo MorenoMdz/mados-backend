@@ -1,3 +1,5 @@
+const Antl = use('Antl');
+
 class Repair {
   get validateAll() {
     return true;
@@ -8,6 +10,10 @@ class Repair {
       title: 'required',
       description: 'required',
     };
+  }
+
+  get messages() {
+    return Antl.list('validation');
   }
 }
 
