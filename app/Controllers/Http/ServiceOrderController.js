@@ -64,9 +64,10 @@ class ServiceOrderController {
       'delivery_date',
       'warranty',
       'received_by',
+      'creator_id',
     ]);
     // data.active = true
-    data.creator_id = auth.user ? auth.user.id : 1;
+    data.creator_id = data.creator_id ? data.creator_id : 1;
     const serviceOrder = await ServiceOrder.create(data);
     return serviceOrder;
   }

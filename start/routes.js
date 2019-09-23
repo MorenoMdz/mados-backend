@@ -49,7 +49,9 @@ Route.resource('stores', 'StoreController')
 Route.resource('systems', 'SystemController')
   .apiOnly()
   .validator([[['systems.store'], ['System']]]);
-Route.resource('serviceorders', 'ServiceOrderController').apiOnly();
+Route.resource('serviceorders', 'ServiceOrderController')
+  .apiOnly()
+  .validator([[['serviceorders.store'], ['Service']]]);
 
 // Store locked routes
 // TODO
