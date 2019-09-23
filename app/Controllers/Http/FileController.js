@@ -2,11 +2,19 @@ const File = use('App/Models/File');
 const Helpers = use('Helpers');
 
 class FileController {
+  async index() {
+    const files = await File.query().fetch();
+    return files;
+  }
+
   async store({ request, response }) {
     try {
       if (!request.file('file')) return;
 
-      const upload = request.file('file', { size: '5mb' });
+      const upload = request.file('file', {
+        maxSize: '5mb',
+        allowedExtensions: ['jpg', 'png', 'jpeg'],
+      });
       const fileName = `${Date.now()}.${upload.subtype}`;
       await upload.move(Helpers.tmpPath('uploads'), { name: fileName });
 

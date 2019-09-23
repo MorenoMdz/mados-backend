@@ -11,15 +11,17 @@ class SystemController {
 
   async store({ request, auth }) {
     const data = request.only([
-      'name',
-      'email',
-      'information',
-      'obs',
       'owner_id',
       'subscription_id',
+      'name',
+      'email',
+      'cnpj',
+      'information',
+      'obs',
+      'creator_id',
     ]);
     data.active = true;
-    data.creator_id = auth.user ? auth.user.id : 1;
+    data.creator_id = data.creator_id ? data.creator_id : 1;
     const system = await System.create({ ...data });
     return system;
   }

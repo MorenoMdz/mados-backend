@@ -1,4 +1,8 @@
 class Reset {
+  get validateAll() {
+    return true;
+  }
+
   get rules() {
     return {
       token: 'required',

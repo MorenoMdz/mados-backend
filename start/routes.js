@@ -10,20 +10,45 @@ Route.post('forgot', 'ForgotPasswordController.store').validator('Forgot');
 Route.put('forgot', 'ForgotPasswordController.update').validator('Reset');
 
 // System wide & Admin routes
-Route.get('files/:id', 'FileController.show');
-Route.post('files', 'FileController.store');
-Route.resource('clients', 'ClientController').apiOnly();
-Route.resource('equipments', 'EquipmentController').apiOnly();
-Route.resource('address', 'AddressController').apiOnly();
-Route.resource('diagnostic', 'DiagnosticController').apiOnly();
-Route.resource('diagstatus', 'DiagStatusController').apiOnly();
-Route.resource('repairstatus', 'RepairStatusController').apiOnly();
-Route.resource('osstatus', 'OsStatusController').apiOnly();
-Route.resource('paymentstatus', 'PaymentStatusController').apiOnly();
-Route.resource('priorities', 'PriorityController').apiOnly();
-Route.resource('repairs', 'RepairController').apiOnly();
-Route.resource('stores', 'StoreController').apiOnly();
-Route.resource('systems', 'SystemController').apiOnly();
+Route.resource('address', 'AddressController')
+  .apiOnly()
+  .validator([[['address.store'], ['Address']]]);
+Route.resource('clients', 'ClientController')
+  .apiOnly()
+  .validator([[['clients.store'], ['Client']]]);
+Route.resource('diagnostics', 'DiagnosticController')
+  .apiOnly()
+  .validator([[['diagnostics.store'], ['Diagnostic']]]);
+Route.resource('diagstatus', 'DiagStatusController')
+  .apiOnly()
+  .validator([[['diagstatus.store'], ['DiagStatus']]]);
+Route.resource('equipments', 'EquipmentController')
+  .apiOnly()
+  .validator([[['equipments.store'], ['Equipment']]]);
+Route.resource('files', 'FileController')
+  .apiOnly()
+  .validator([[['files.store'], ['File']]]);
+Route.resource('osstatus', 'OsStatusController')
+  .apiOnly()
+  .validator([[['osstatus.store'], ['OsStatus']]]);
+Route.resource('paymentstatus', 'PaymentStatusController')
+  .apiOnly()
+  .validator([[['paymentstatus.store'], ['PaymentStatus']]]);
+Route.resource('priorities', 'PriorityController')
+  .apiOnly()
+  .validator([[['priorities.store'], ['Priority']]]);
+Route.resource('repairs', 'RepairController')
+  .apiOnly()
+  .validator([[['repairs.store'], ['Repair']]]);
+Route.resource('repairstatus', 'RepairStatusController')
+  .apiOnly()
+  .validator([[['repairstatus.store'], ['RepairStatus']]]);
+Route.resource('stores', 'StoreController')
+  .apiOnly()
+  .validator([[['stores.store'], ['Store']]]);
+Route.resource('systems', 'SystemController')
+  .apiOnly()
+  .validator([[['systems.store'], ['System']]]);
 Route.resource('serviceorders', 'ServiceOrderController').apiOnly();
 
 // Store locked routes

@@ -8,8 +8,8 @@ class OsStatusController {
   }
 
   async store({ request, auth }) {
-    const data = request.only(['title', 'description']);
-    data.creator_id = auth.user ? auth.user.id : 1;
+    const data = request.only(['title', 'description', 'creator_id']);
+    data.creator_id = data.creator_id ? data.creator_id : 1;
     const osStatus = await OsStatus.create({ ...data });
     return osStatus;
   }

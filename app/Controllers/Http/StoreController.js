@@ -19,9 +19,10 @@ class StoreController {
       'vip_level',
       'owner_id',
       'address_id',
+      'creator_id',
     ]);
     data.active = true;
-    data.creator_id = auth.user ? auth.user.id : 1;
+    data.creator_id = data.creator_id ? data.creator_id : 1;
     const store = await Store.create(data);
     return store;
   }
