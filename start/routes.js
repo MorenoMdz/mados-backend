@@ -10,9 +10,7 @@ Route.post('forgot', 'ForgotPasswordController.store').validator('Forgot');
 Route.put('forgot', 'ForgotPasswordController.update').validator('Reset');
 
 // System wide & Admin routes
-Route.resource('address', 'AddressController')
-  .apiOnly()
-  .validator([[['address.store'], ['Address']]]);
+
 Route.resource('clients', 'ClientController')
   .apiOnly()
   .validator([[['clients.store'], ['Client']]]);
@@ -59,4 +57,7 @@ Route.resource('serviceorders', 'ServiceOrderController')
 // Auth routes
 Route.group(() => {
   // Put here all secured routes
+  Route.resource('address', 'AddressController')
+    .apiOnly()
+    .validator([[['address.store'], ['Address']]]);
 }).middleware(['auth']);

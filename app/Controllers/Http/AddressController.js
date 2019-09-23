@@ -9,6 +9,7 @@ class AddressController {
 
   async store({ request, auth }) {
     const data = request.only([
+      // 'user_id',
       'street',
       'number',
       'district',
@@ -20,10 +21,9 @@ class AddressController {
       'store_id',
       'client_id',
       'system_id',
-      'user_id',
     ]);
-    data.user_id = data.user_id ? data.user_id : 1;
-    const address = await Address.create({ ...data });
+    // data.user_id = auth.user.id;
+    const address = await Address.create({ ...data, user_id: auth.user.id });
     return address;
   }
 

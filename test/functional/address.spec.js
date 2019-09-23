@@ -18,12 +18,18 @@ afterEach(async () => {
 });
 
 test('it should list no address', async ({ client }) => {
-  const response = await client.get('/address').end();
+  const user = await Factory.model('App/Models/User').create();
+
+  const response = await client
+    .get('/address')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSON([]);
 });
 
 test('it should list all addresses', async ({ client }) => {
+  const user = await Factory.model('App/Models/User').create();
   await Address.create({
     street: 'street',
     number: '123',
@@ -35,7 +41,10 @@ test('it should list all addresses', async ({ client }) => {
     zip: '88010300',
   });
 
-  const response = await client.get('/address').end();
+  const response = await client
+    .get('/address')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSONSubset([
     {
@@ -62,7 +71,7 @@ test('it should save a new address', async ({ client }) => {
     state: 'sc',
     country: 'Brazil',
     zip: '88010300',
-    user_id: user.id,
+    // user_id: user.id,
   };
   const response = await client
     .post('/address')
