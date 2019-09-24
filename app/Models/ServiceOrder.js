@@ -2,6 +2,16 @@
 const Model = use('Model');
 
 class ServiceOrder extends Model {
+  static boot() {
+    super.boot();
+    // error on test, can't load the store data
+    // this.addHook('afterCreate', 'serviceOrderUpdateHook.sendServiceOrderEmail');
+    this.addHook(
+      'beforeUpdate',
+      'serviceOrderUpdateHook.sendServiceOrderEmail'
+    );
+  }
+
   creator() {
     return this.belongsTo('App/Models/User', 'creator_id', 'id');
   }
