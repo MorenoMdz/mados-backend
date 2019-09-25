@@ -30,7 +30,9 @@
     "@adonisjs/redis": "^2.0.7",
     "@adonisjs/validator": "^5.0.6",
     "@adonisjs/vow": "^1.0.17",
+    "adonis-acl": "^1.1.1",
     "adonis-kue": "^5.0.1",
+    "adonis-sentry": "^2.0.2",
     "date-fns": "^2.2.1",
     "moment": "^2.24.0",
     "pg": "^7.12.1"
