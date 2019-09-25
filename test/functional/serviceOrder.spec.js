@@ -37,7 +37,6 @@ async function generateRelations(client) {
     .loginVia(user)
     .send(storePayload)
     .end();
-  console.log('store', store);
   // equipment
   const equipmentPayload = {
     title: 'diag_status_1',

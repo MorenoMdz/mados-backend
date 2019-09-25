@@ -45,7 +45,7 @@ test('it should list all systems', async ({ client }) => {
   ]);
 });
 
-test('it should save a new store', async ({ client }) => {
+test('it should save a new system', async ({ client }) => {
   const user = await Factory.model('App/Models/User').create();
   const systemPayload = {
     name: 'system_1',
@@ -63,7 +63,7 @@ test('it should save a new store', async ({ client }) => {
   response.assertStatus(200);
 });
 
-test('it should not save a new store if validation fails', async ({
+test('it should not save a new system if validation fails', async ({
   client,
 }) => {
   const user = await Factory.model('App/Models/User').create();

@@ -3,11 +3,17 @@ const Route = use('Route');
 Route.get('/', () => {
   return { greeting: 'Hello world from MadOs' };
 });
-// User & Auth Routes
+// User, Auth & ACL Routes
 Route.post('users', 'UserController.store').validator('User');
 Route.post('sessions', 'SessionController.store').validator('Session');
 Route.post('forgot', 'ForgotPasswordController.store').validator('Forgot');
 Route.put('forgot', 'ForgotPasswordController.update').validator('Reset');
+Route.resource('permissions', 'PermissionController')
+  .apiOnly()
+  .middleware('auth');
+Route.resource('roles', 'RoleController')
+  .apiOnly()
+  .middleware('auth');
 
 // System wide & Admin routes
 
