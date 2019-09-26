@@ -1,14 +1,17 @@
 const { test, trait, beforeEach, afterEach } = use('Test/Suite')('Address');
 const Mail = use('Mail');
+const Role = use('Role');
+const Factory = use('Factory');
 const User = use('App/Models/User');
 const Address = use('App/Models/Address');
-const Factory = use('Factory');
 
 trait('Auth/Client');
 trait('Test/ApiClient');
+trait('DatabaseTransactions');
 
 beforeEach(async () => {
   await User.query().delete();
+  await Role.query().delete();
   await Address.query().delete();
   Mail.fake();
 });
@@ -17,19 +20,31 @@ afterEach(async () => {
   Mail.restore();
 });
 
-test('it should list no address', async ({ client }) => {
+async function generateAdminUser() {
   const user = await Factory.model('App/Models/User').create();
+  const role = await Role.create({
+    name: 'Administrator',
+    slug: 'administrator',
+    description: 'administrator of a store',
+  });
+  await user.roles().attach(role.id);
+  await user.loadMany(['roles', 'permissions']);
 
+  return user;
+}
+
+test('it should list no address', async ({ client }) => {
+  const admin = await generateAdminUser();
   const response = await client
     .get('/address')
-    .loginVia(user)
+    .loginVia(admin)
     .end();
   response.assertStatus(200);
   response.assertJSON([]);
 });
 
 test('it should list all addresses', async ({ client }) => {
-  const user = await Factory.model('App/Models/User').create();
+  const admin = await generateAdminUser();
   await Address.create({
     street: 'street',
     number: '123',
@@ -43,7 +58,7 @@ test('it should list all addresses', async ({ client }) => {
 
   const response = await client
     .get('/address')
-    .loginVia(user)
+    .loginVia(admin)
     .end();
   response.assertStatus(200);
   response.assertJSONSubset([
@@ -61,7 +76,7 @@ test('it should list all addresses', async ({ client }) => {
 });
 
 test('it should save a new address', async ({ client }) => {
-  const user = await Factory.model('App/Models/User').create();
+  const admin = await generateAdminUser();
   const address = {
     street: 'street',
     number: '123',
@@ -75,7 +90,7 @@ test('it should save a new address', async ({ client }) => {
   };
   const response = await client
     .post('/address')
-    .loginVia(user)
+    .loginVia(admin)
     .send(address)
     .end();
   response.assertStatus(200);
@@ -84,7 +99,7 @@ test('it should save a new address', async ({ client }) => {
 test('it should not save a new address if validation fail', async ({
   client,
 }) => {
-  const user = await Factory.model('App/Models/User').create();
+  const admin = await generateAdminUser();
   const address = {
     // street: 'street',
     number: '123',
@@ -94,11 +109,11 @@ test('it should not save a new address if validation fail', async ({
     state: 'sc',
     country: 'Brazil',
     zip: '88010300',
-    user_id: user.id,
+    user_id: admin.id,
   };
   const response = await client
     .post('/address')
-    .loginVia(user)
+    .loginVia(admin)
     .send(address)
     .end();
   response.assertStatus(400);

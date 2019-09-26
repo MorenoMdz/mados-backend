@@ -4,7 +4,10 @@ Route.get('/', () => {
   return { greeting: 'Hello world from MadOs' };
 });
 // User, Auth & ACL Routes
+Route.get('users', 'UserController.index');
 Route.post('users', 'UserController.store').validator('User');
+Route.put('users/:id', 'UserController.update').middleware('auth');
+// .validator('User') //TODO
 Route.post('sessions', 'SessionController.store').validator('Session');
 Route.post('forgot', 'ForgotPasswordController.store').validator('Forgot');
 Route.put('forgot', 'ForgotPasswordController.update').validator('Reset');
@@ -16,7 +19,6 @@ Route.resource('roles', 'RoleController')
   .middleware('auth');
 
 // System wide & Admin routes
-
 Route.resource('clients', 'ClientController')
   .apiOnly()
   .validator([[['clients.store'], ['Client']]]);
@@ -66,4 +68,4 @@ Route.group(() => {
   Route.resource('address', 'AddressController')
     .apiOnly()
     .validator([[['address.store'], ['Address']]]);
-}).middleware(['auth']);
+}).middleware(['auth', 'is:(administrator || moderator']);

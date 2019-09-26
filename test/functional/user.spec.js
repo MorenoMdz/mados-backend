@@ -103,3 +103,5 @@ test('should not create an User if username is already in use', async ({
 });
 
 // TODO Should not create an user with insecure password
+// TODO Should update user
+// TODO Should create user with roles and perms

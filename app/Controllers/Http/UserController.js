@@ -1,22 +1,42 @@
 const User = use('App/Models/User');
-const Mail = use('Mail');
+// const Mail = use('Mail');
 
 class UserController {
   async index() {
-    const user = await User.query() /* .with('user') */
+    const user = await User.query()
+      .with('permissions')
+      .with('roles')
       .fetch();
     return user;
   }
 
   async store({ request }) {
-    const data = request.only(['username', 'email', 'password']);
+    const { permissions, roles, ...data } = request.only([
+      'username',
+      'email',
+      'password',
+      'permissions',
+      'roles',
+    ]);
     const user = await User.create(data);
-    await Mail.send('emails.welcome', user.toJSON(), message => {
-      message
-        .to(user.email)
-        .from('admin@mados.tech')
-        .subject('Welcome new User');
-    });
+
+    if (roles) {
+      await user.roles().attach(roles);
+    }
+
+    if (permissions) {
+      await user.permissions().attach(permissions);
+    }
+
+    await user.loadMany(['roles', 'permissions']);
+
+    // await Mail.send('emails.welcome', user.toJSON(), message => {
+    //   message
+    //     .to(user.email)
+    //     .from('admin@mados.tech')
+    //     .subject('Welcome new User');
+    // });
+
     return user;
   }
 
@@ -27,10 +47,25 @@ class UserController {
   }
 
   async update({ params, request }) {
-    const data = request.only(['email', 'password']);
+    const { permissions, roles, ...data } = request.only([
+      'username',
+      'email',
+      'password',
+      'permissions',
+      'roles',
+    ]);
     const user = await User.findOrFail(params.id);
     user.merge(data);
     await user.save();
+
+    if (roles) {
+      await user.roles().sync(roles);
+    }
+
+    if (permissions) {
+      await user.permissions().sync(permissions);
+    }
+    await user.loadMany(['roles', 'permissions']);
     return user;
   }
 
