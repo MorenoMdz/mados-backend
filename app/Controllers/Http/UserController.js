@@ -1,5 +1,6 @@
 const User = use('App/Models/User');
-// const Mail = use('Mail');
+const Kue = use('Kue');
+const Job = use('App/Jobs/ServiceOrderEmail');
 
 class UserController {
   async index() {
@@ -30,12 +31,11 @@ class UserController {
 
     await user.loadMany(['roles', 'permissions']);
 
-    // await Mail.send('emails.welcome', user.toJSON(), message => {
-    //   message
-    //     .to(user.email)
-    //     .from('admin@mados.tech')
-    //     .subject('Welcome new User');
-    // });
+    // Kue.dispatch(
+    //   Job.key,
+    //   { email: user.email, username: user.username },
+    //   { attempts: 3 }
+    // );
 
     return user;
   }

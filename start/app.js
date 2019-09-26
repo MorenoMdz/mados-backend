@@ -23,6 +23,7 @@ const providers = [
   'adonis-kue/providers/KueProvider',
   'adonis-sentry/providers/Sentry',
   'adonis-acl/providers/AclProvider',
+  '@adonisjs/redis/providers/RedisProvider',
 ];
 
 /*

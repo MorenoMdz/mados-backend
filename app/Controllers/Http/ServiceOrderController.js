@@ -29,6 +29,7 @@ class ServiceOrderController {
       .with('diagStatus')
       .with('repairStatus')
       .with('paymentStatus')
+      .with('diagnostics')
       .fetch();
     return serviceOrder;
   }
@@ -121,9 +122,12 @@ class ServiceOrderController {
       'warranty',
       'received_by',
     ]);
+    const diagnostics = request.input('diagnostics');
     const serviceOrder = await ServiceOrder.findOrFail(params.id);
     serviceOrder.merge(data);
     await serviceOrder.save();
+    await serviceOrder.diagnostics().attach(diagnostics);
+    await serviceOrder.load('diagnostics');
     return serviceOrder;
   }
 
