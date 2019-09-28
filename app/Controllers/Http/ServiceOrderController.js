@@ -75,17 +75,19 @@ class ServiceOrderController {
 
   async show({ params }) {
     const serviceOrder = await ServiceOrder.findOrFail(params.id);
-    await serviceOrder.loadMany([
-      'creator',
-      'client',
-      'store',
-      'equipment',
-      'priority',
-      'osStatus',
-      'diagStatus',
-      'repairStatus',
-      'paymentStatus',
-    ]);
+    // await serviceOrder.loadMany([
+    //   'creator',
+    //   'client',
+    //   'store',
+    //   'equipment',
+    //   'priority',
+    //   'osStatus',
+    //   'diagStatus',
+    //   'repairStatus',
+    //   'paymentStatus',
+    //   'diagnostics',
+    // ]);
+    await serviceOrder.load('diagnostics');
     // TODO load serviceOrder orders
     return serviceOrder;
   }
@@ -127,10 +129,10 @@ class ServiceOrderController {
     await serviceOrder.save();
 
     const diagnostics = request.input('diagnostics');
-    await serviceOrder.diagnostics().attach(diagnostics);
+    await serviceOrder.diagnostics().sync(diagnostics);
 
     const repairs = request.input('repairs');
-    await serviceOrder.repairs().attach(repairs);
+    await serviceOrder.repairs().sync(repairs);
 
     await serviceOrder.loadMany(['diagnostics', 'repairs']);
     return serviceOrder;

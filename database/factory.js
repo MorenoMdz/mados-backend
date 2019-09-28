@@ -34,6 +34,7 @@ Factory.blueprint('App/Models/Equipment', (faker, i, data = {}) => {
     ...data,
   };
 });
+
 Factory.blueprint('App/Models/Store', (faker, i, data = {}) => {
   return {
     name: faker.name(),
@@ -51,6 +52,7 @@ Factory.blueprint('App/Models/Store', (faker, i, data = {}) => {
     ...data,
   };
 });
+
 Factory.blueprint('App/Models/Client', (faker, i, data = {}) => {
   return {
     name: faker.name(),
@@ -64,6 +66,25 @@ Factory.blueprint('App/Models/Client', (faker, i, data = {}) => {
     ...data,
   };
 });
+
+Factory.blueprint('App/Models/Diagnostic', (faker, i, data = {}) => {
+  return {
+    diag_title: faker.string(),
+    diag_description: faker.string(),
+    diag_obs: faker.string(),
+    ...data,
+  };
+});
+
+Factory.blueprint('App/Models/Repair', (faker, i, data = {}) => {
+  return {
+    title: faker.string(),
+    description: faker.string(),
+    obs: faker.string(),
+    ...data,
+  };
+});
+
 Factory.blueprint('App/Models/ServiceOrder', (faker, i, data = {}) => {
   return {
     serial_number: faker.name(),
@@ -88,6 +109,58 @@ Factory.blueprint('App/Models/ServiceOrder', (faker, i, data = {}) => {
     },
     equipment_id: async () => {
       return (await Factory.model('App/Models/Equipment').create()).id;
+    },
+    ...data,
+  };
+});
+
+Factory.blueprint('App/Models/OsStatus', (faker, i, data = {}) => {
+  return {
+    title: faker.string(),
+    description: faker.string(),
+    ...data,
+  };
+});
+
+Factory.blueprint('App/Models/DiagStatus', (faker, i, data = {}) => {
+  return {
+    title: faker.string(),
+    description: faker.string(),
+    creator_id: async () => {
+      return (await Factory.model('App/Models/User').create()).id;
+    },
+    ...data,
+  };
+});
+
+Factory.blueprint('App/Models/RepairStatus', (faker, i, data = {}) => {
+  return {
+    title: faker.string(),
+    description: faker.string(),
+    creator_id: async () => {
+      return (await Factory.model('App/Models/User').create()).id;
+    },
+    ...data,
+  };
+});
+
+Factory.blueprint('App/Models/PaymentStatus', (faker, i, data = {}) => {
+  return {
+    title: faker.string(),
+    description: faker.string(),
+    creator_id: async () => {
+      return (await Factory.model('App/Models/User').create()).id;
+    },
+    ...data,
+  };
+});
+
+Factory.blueprint('App/Models/Priority', (faker, i, data = {}) => {
+  return {
+    title: faker.string(),
+    description: faker.string(),
+    creator_id: async () => {
+      return (await Factory.model('App/Models/User').create()).id;
     },
     ...data,
   };
