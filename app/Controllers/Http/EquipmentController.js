@@ -8,7 +8,13 @@ class EquipmentController {
   }
 
   async store({ request }) {
-    const data = request.only(['name', 'brand', 'details', 'obs']);
+    const data = request.only([
+      'name',
+      'brand',
+      'details',
+      'obs',
+      'creator_id',
+    ]);
     data.active = true;
     // data.creator_id = auth.user ? auth.user.id : 1
     const equipment = await Equipment.create({ ...data });

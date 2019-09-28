@@ -29,7 +29,7 @@ class ServiceOrderController {
       .with('diagStatus')
       .with('repairStatus')
       .with('paymentStatus')
-      .with('diagnostics')
+      // .with('diagnostics')
       .fetch();
     return serviceOrder;
   }

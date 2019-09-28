@@ -48,13 +48,12 @@ class ServiceOrder extends Model {
     return this.hasOne('App/Models/PaymentStatus', 'payment_status_id', 'id');
   }
 
-  // TODO
-  // OS to Diagnostics
   diagnostics() {
     return this.belongsToMany('App/Models/Diagnostic').pivotTable(
       'so_diagnostics'
     );
   }
+  // TODO
   // OS to Repairs
 }
 

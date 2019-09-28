@@ -9,7 +9,7 @@ NewUserHook.sendServiceOrderEmail = async userInstance => {
   // gets the user to receive an email, needs to be an operator of the store
   // const user = await userInstance.store().fetch();
   const { username, email } = userInstance;
-  console.log(username, email);
+  // console.log(username, email);
 
   // Kue.dispatch(Job.key, { email, username }, { attempts: 3 });
 };
