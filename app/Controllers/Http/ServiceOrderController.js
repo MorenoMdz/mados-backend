@@ -122,12 +122,17 @@ class ServiceOrderController {
       'warranty',
       'received_by',
     ]);
-    const diagnostics = request.input('diagnostics');
     const serviceOrder = await ServiceOrder.findOrFail(params.id);
     serviceOrder.merge(data);
     await serviceOrder.save();
+
+    const diagnostics = request.input('diagnostics');
     await serviceOrder.diagnostics().attach(diagnostics);
-    await serviceOrder.load('diagnostics');
+
+    const repairs = request.input('repairs');
+    await serviceOrder.repairs().attach(repairs);
+
+    await serviceOrder.loadMany(['diagnostics', 'repairs']);
     return serviceOrder;
   }
 

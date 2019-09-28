@@ -53,6 +53,10 @@ class ServiceOrder extends Model {
       'so_diagnostics'
     );
   }
+
+  repairs() {
+    return this.belongsToMany('App/Models/Repair').pivotTable('so_repairs');
+  }
   // TODO
   // OS to Repairs
 }

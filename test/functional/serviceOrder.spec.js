@@ -51,3 +51,12 @@ test('it should not save a new store if validation fails', async ({
     .end();
   response.assertStatus(400);
 });
+
+// TODO
+// it should update a Service Order to add a Diagnostic
+// it should update a Service Order to add a Repair
+// it should update a Service Order to change OS Status
+// it should update a Service Order to change Diagnostic Status
+// it should update a Service Order to change Repair Status
+// it should update a Service Order to change Payment Status
+// it should update a Service Order to change Priority Status
