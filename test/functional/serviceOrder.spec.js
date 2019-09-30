@@ -81,9 +81,8 @@ test('it should update a Service Order to add a Diagnostic', async ({
   const serviceOrderFound = await ServiceOrder.findOrFail(serviceOrder.id);
   await serviceOrderFound.load('diagnostics');
   response.assertStatus(200);
-  // response.assertJSONSubset([{ id: serviceOrder.id }]);
   assert.equal(serviceOrderFound.id, serviceOrder.id);
-  // assert.equal(diags, [diagnostic.id]);
+  assert.equal(diagnostic.id, serviceOrderFound.toJSON().diagnostics[0].id);
 });
 
 test('it should update a Service Order to add a Repair', async ({
@@ -102,8 +101,9 @@ test('it should update a Service Order to add a Repair', async ({
 
   const serviceOrderFound = await ServiceOrder.findOrFail(serviceOrder.id);
   await serviceOrderFound.load('repairs');
-  // response.assertStatus(200);
+  response.assertStatus(200);
   assert.equal(serviceOrderFound.id, serviceOrder.id);
+  assert.equal(repair.id, serviceOrderFound.toJSON().repairs[0].id);
 });
 
 test('it should update a Service Order to change OS Status', async ({
