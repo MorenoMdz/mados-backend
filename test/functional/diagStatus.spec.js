@@ -20,18 +20,27 @@ afterEach(async () => {
 });
 
 test('it should list no diagnostics statuses', async ({ client }) => {
-  const response = await client.get('/diagstatus').end();
+  const user = await Factory.model('App/Models/User').create();
+
+  const response = await client
+    .get('/diagstatus')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSON([]);
 });
 
 test('it should list all diagnostics statuses', async ({ client }) => {
+  const user = await Factory.model('App/Models/User').create();
   await DiagStatus.create({
     title: 'diag_status_1',
     description: 'diag_description_1',
   });
 
-  const response = await client.get('/diagstatus').end();
+  const response = await client
+    .get('/diagstatus')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSONSubset([
     {

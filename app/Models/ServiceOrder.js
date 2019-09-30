@@ -57,8 +57,6 @@ class ServiceOrder extends Model {
   repairs() {
     return this.belongsToMany('App/Models/Repair').pivotTable('so_repairs');
   }
-  // TODO
-  // OS to Repairs
 }
 
 module.exports = ServiceOrder;

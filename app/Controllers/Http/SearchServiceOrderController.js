@@ -1,5 +1,3 @@
-'use strict'
-
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -7,6 +5,11 @@
 /**
  * Resourceful controller for interacting with searchserviceorders
  */
+
+const User = use('App/Models/User');
+const Database = use('Database');
+
+const ServiceOrder = use('App/Models/ServiceOrder');
 class SearchServiceOrderController {
   /**
    * Show a list of all searchserviceorders.
@@ -17,77 +20,63 @@ class SearchServiceOrderController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-  }
+  async index({ request, auth }) {
+    const user = await User.findOrFail(auth.user.id);
+    await user.load('stores');
+    const stores = user.toJSON().stores.map(store => store.id);
 
-  /**
-   * Render a form to be used for creating a new searchserviceorder.
-   * GET searchserviceorders/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
+    const { type, status, value } = request.get();
 
-  /**
-   * Create/save a new searchserviceorder.
-   * POST searchserviceorders
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
+    if (type === 'raw') {
+      const serviceOrders = await ServiceOrder.query()
+        .whereIn('store_id', stores) // match user stores
+        .whereHas('client', builder => {
+          builder.where('cpf', 'like', `%${value}%`);
+        })
+        .orWhere('os_number', 'like', `%${value}%`)
+        .orWhere('serial_number', 'like', `%${value}%`)
+        .with('creator')
+        .with('store')
+        .with('equipment')
+        .with('priority')
+        .with('osStatus')
+        .with('diagStatus')
+        .with('repairStatus')
+        .with('paymentStatus')
+        .with('diagnostics')
+        .with('client')
+        .fetch();
+      return serviceOrders;
+    }
+    // 'osstatus' || 'diagstatus' || 'repairstatus';
+    function getStatusType() {
+      if (status === 'osstatus') return 'os_status_id';
+      if (status === 'diagstatus') return 'diag_status_id';
+      if (status === 'repairstatus') return 'repair_status_id';
+      if (status === 'paymentstatus') return 'payment_status_id';
+    }
 
-  /**
-   * Display a single searchserviceorder.
-   * GET searchserviceorders/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
+    if (type === 'status') {
+      const serviceOrders = await ServiceOrder.query()
+        .whereIn('store_id', stores) // match user stores
+        .where(getStatusType(), value)
+        .with('creator')
+        .with('store')
+        .with('equipment')
+        .with('priority')
+        .with('osStatus')
+        .with('diagStatus')
+        .with('repairStatus')
+        .with('paymentStatus')
+        .with('diagnostics')
+        .with('client')
+        .fetch();
+      return serviceOrders;
+    }
 
-  /**
-   * Render a form to update an existing searchserviceorder.
-   * GET searchserviceorders/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update searchserviceorder details.
-   * PUT or PATCH searchserviceorders/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a searchserviceorder with id.
-   * DELETE searchserviceorders/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    console.log(serviceOrders.toJSON().length);
+    return serviceOrders;
   }
 }
 
-module.exports = SearchServiceOrderController
+module.exports = SearchServiceOrderController;

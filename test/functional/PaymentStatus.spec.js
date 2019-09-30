@@ -20,18 +20,26 @@ afterEach(async () => {
 });
 
 test('it should list no payment statuses', async ({ client }) => {
-  const response = await client.get('/paymentstatus').end();
+  const user = await Factory.model('App/Models/User').create();
+  const response = await client
+    .get('/paymentstatus')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSON([]);
 });
 
 test('it should list all payment statuses', async ({ client }) => {
+  const user = await Factory.model('App/Models/User').create();
   await PaymentStatus.create({
     title: 'payment_status',
     description: 'payment_status_description_1',
   });
 
-  const response = await client.get('/paymentstatus').end();
+  const response = await client
+    .get('/paymentstatus')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSONSubset([
     {

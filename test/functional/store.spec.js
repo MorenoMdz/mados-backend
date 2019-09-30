@@ -18,7 +18,11 @@ afterEach(async () => {
 });
 
 test('it should list no stores', async ({ client }) => {
-  const response = await client.get('/stores').end();
+  const user = await Factory.model('App/Models/User').create();
+  const response = await client
+    .get('/stores')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSON([]);
 });
@@ -34,7 +38,10 @@ test('it should list all stores', async ({ client }) => {
     active: true,
     owner_id: user.id,
   });
-  const response = await client.get('/stores').end();
+  const response = await client
+    .get('/stores')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSONSubset([
     {

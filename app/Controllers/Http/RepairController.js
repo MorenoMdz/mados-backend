@@ -8,8 +8,8 @@ class RepairController {
   }
 
   async store({ request, auth }) {
-    const data = request.only(['title', 'description', 'obs', 'creator_id']);
-    data.creator_id = data.creator_id ? data.creator_id : 1;
+    const data = request.only(['title', 'description', 'obs']);
+    data.creator_id = auth.user.id || 1;
     const repair = await Repair.create({ ...data });
     return repair;
   }

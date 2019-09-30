@@ -18,19 +18,27 @@ afterEach(async () => {
 });
 
 test('it should list no repairs', async ({ client }) => {
-  const response = await client.get('/repairs').end();
+  const user = await Factory.model('App/Models/User').create();
+  const response = await client
+    .get('/repairs')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSON([]);
 });
 
 test('it should list all repairs', async ({ client }) => {
+  const user = await Factory.model('App/Models/User').create();
   await Repair.create({
     title: '1',
     description: '1_desc',
     obs: '1_obs',
   });
 
-  const response = await client.get('/repairs').end();
+  const response = await client
+    .get('/repairs')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSONSubset([
     {

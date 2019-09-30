@@ -18,7 +18,11 @@ afterEach(async () => {
 });
 
 test('it should list no systems', async ({ client }) => {
-  const response = await client.get('/systems').end();
+  const user = await Factory.model('App/Models/User').create();
+  const response = await client
+    .get('/systems')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSON([]);
 });
@@ -33,7 +37,10 @@ test('it should list all systems', async ({ client }) => {
     owner_id: user.id,
     creator_id: user.id,
   });
-  const response = await client.get('/systems').end();
+  const response = await client
+    .get('/systems')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSONSubset([
     {

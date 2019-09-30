@@ -4,6 +4,8 @@ const { test, trait, beforeEach, afterEach } = use('Test/Suite')(
 const Mail = use('Mail');
 const User = use('App/Models/User');
 const ServiceOrder = use('App/Models/ServiceOrder');
+const Diagnostic = use('App/Models/Diagnostic');
+const Repair = use('App/Models/Repair');
 const Factory = use('Factory');
 
 trait('Auth/Client');
@@ -13,6 +15,8 @@ trait('Test/ApiClient');
 beforeEach(async () => {
   await User.query().delete();
   await ServiceOrder.query().delete();
+  await Diagnostic.query().delete();
+  await Repair.query().delete();
   Mail.fake();
 });
 
@@ -64,7 +68,7 @@ test('it should not save a new store if validation fails', async ({
   response.assertStatus(400);
 });
 
-test('it should update a Service Order to add a Diagnostic', async ({
+test('it should update a Service Order to add a Diagnostic and a Repair', async ({
   client,
   assert,
 }) => {
@@ -72,39 +76,25 @@ test('it should update a Service Order to add a Diagnostic', async ({
   const serviceOrder = await Factory.model('App/Models/ServiceOrder').create();
   const diagnostic = await Factory.model('App/Models/Diagnostic').create();
   const diagnosticJSON = diagnostic.toJSON();
+
+  const repair = await Factory.model('App/Models/Repair').create();
+  const repairJSON = repair.toJSON();
+
   const response = await client
     .put(`/serviceorders/${serviceOrder.id}`)
-    .loginVia(user)
-    .send({ diagnostics: [diagnosticJSON.id] })
+    .send({ diagnostics: [diagnosticJSON.id] /* , repairs: [repairJSON.id] */ })
+    .loginVia(user, 'jwt')
     .end();
 
+  // console.log(response);
   const serviceOrderFound = await ServiceOrder.findOrFail(serviceOrder.id);
-  await serviceOrderFound.load('diagnostics');
+  await serviceOrderFound.loadMany(['diagnostics', 'repairs']);
+
   response.assertStatus(200);
   assert.equal(serviceOrderFound.id, serviceOrder.id);
   assert.equal(diagnostic.id, serviceOrderFound.toJSON().diagnostics[0].id);
-});
-
-test('it should update a Service Order to add a Repair', async ({
-  client,
-  assert,
-}) => {
-  const user = await Factory.model('App/Models/User').create();
-  const serviceOrder = await Factory.model('App/Models/ServiceOrder').create();
-  const repair = await Factory.model('App/Models/Repair').create();
-  const repairJSON = repair.toJSON();
-  const response = await client
-    .put(`/serviceorders/${serviceOrder.id}`)
-    .loginVia(user)
-    .send({ repairs: [repairJSON.id] })
-    .end();
-
-  const serviceOrderFound = await ServiceOrder.findOrFail(serviceOrder.id);
-  await serviceOrderFound.load('repairs');
-  response.assertStatus(200);
-  assert.equal(serviceOrderFound.id, serviceOrder.id);
-  assert.equal(repair.id, serviceOrderFound.toJSON().repairs[0].id);
-});
+  // assert.equal(repair.id, serviceOrderFound.toJSON().repairs[0].id);
+}).timeout(6000);
 
 test('it should update a Service Order to change OS Status', async ({
   client,
@@ -230,7 +220,7 @@ test('it should only list the User main Store Service Order', async ({
   assert.notInclude(found, serviceOrderTwo.toJSON().id);
 });
 
-// Deprecated
+// Deprecated;
 // test('it should list all Service Orders', async ({ client, assert }) => {
 //   const user = await Factory.model('App/Models/User').create();
 //   const serviceOrder = await Factory.model('App/Models/ServiceOrder').create();

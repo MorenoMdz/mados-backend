@@ -18,18 +18,26 @@ afterEach(async () => {
 });
 
 test('it should list no service order statuses', async ({ client }) => {
-  const response = await client.get('/osstatus').end();
+  const user = await Factory.model('App/Models/User').create();
+  const response = await client
+    .get('/osstatus')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSON([]);
 });
 
 test('it should list all service order statuses', async ({ client }) => {
+  const user = await Factory.model('App/Models/User').create();
   await OsStatus.create({
     title: 'os_status',
     description: 'os_status_description_1',
   });
 
-  const response = await client.get('/osstatus').end();
+  const response = await client
+    .get('/osstatus')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSONSubset([
     {

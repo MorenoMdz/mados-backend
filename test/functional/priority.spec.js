@@ -18,18 +18,26 @@ afterEach(async () => {
 });
 
 test('it should list no priorities', async ({ client }) => {
-  const response = await client.get('/priorities').end();
+  const user = await Factory.model('App/Models/User').create();
+  const response = await client
+    .get('/priorities')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSON([]);
 });
 
 test('it should list all priorities', async ({ client }) => {
+  const user = await Factory.model('App/Models/User').create();
   await Priority.create({
     title: 'priority_',
     description: 'priority_description_1',
   });
 
-  const response = await client.get('/priorities').end();
+  const response = await client
+    .get('/priorities')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSONSubset([
     {

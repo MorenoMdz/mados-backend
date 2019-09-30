@@ -18,19 +18,27 @@ afterEach(async () => {
 });
 
 test('it should list no diagnostics', async ({ client }) => {
-  const response = await client.get('/diagnostics').end();
+  const user = await Factory.model('App/Models/User').create();
+  const response = await client
+    .get('/diagnostics')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSON([]);
 });
 
 test('it should list all diagnostics', async ({ client }) => {
+  const user = await Factory.model('App/Models/User').create();
   await Diagnostic.create({
     diag_title: 'diag_1',
     diag_description: 'diag_1_desc',
     diag_obs: 'diag_1_obs',
   });
 
-  const response = await client.get('/diagnostics').end();
+  const response = await client
+    .get('/diagnostics')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSONSubset([
     {

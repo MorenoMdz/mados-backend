@@ -5,6 +5,12 @@ class Repair extends Model {
   user() {
     return this.belongsTo('App/Models/User');
   }
+
+  serviceOrder() {
+    return this.belongsToMany('App/Models/ServiceOrder').pivotTable(
+      'so_repairs'
+    );
+  }
 }
 
 module.exports = Repair;

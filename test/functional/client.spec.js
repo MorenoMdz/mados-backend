@@ -18,7 +18,12 @@ afterEach(async () => {
 });
 
 test('it should list no clients', async ({ client }) => {
-  const response = await client.get('/clients').end();
+  const user = await Factory.model('App/Models/User').create();
+  const response = await client
+    .get('/clients')
+    .loginVia(user)
+    .end();
+
   response.assertStatus(200);
   response.assertJSONSubset({
     total: '0',
@@ -30,6 +35,7 @@ test('it should list no clients', async ({ client }) => {
 });
 
 test('it should list all clients', async ({ client }) => {
+  const user = await Factory.model('App/Models/User').create();
   await Client.create({
     name: 'client_1',
     last_name: 'client_1',
@@ -40,7 +46,10 @@ test('it should list all clients', async ({ client }) => {
     phone2: '123',
     active: true,
   });
-  const response = await client.get('/clients').end();
+  const response = await client
+    .get('/clients')
+    .loginVia(user)
+    .end();
   response.assertStatus(200);
   response.assertJSONSubset({
     total: '1',

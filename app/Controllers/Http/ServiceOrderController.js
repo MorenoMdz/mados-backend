@@ -136,12 +136,15 @@ class ServiceOrderController {
     const serviceOrder = await ServiceOrder.findOrFail(params.id);
     serviceOrder.merge(data);
     await serviceOrder.save();
+    const { diagnostics, repairs } = request.only(['diagnostics', 'repairs']);
 
-    const diagnostics = request.input('diagnostics');
-    await serviceOrder.diagnostics().sync(diagnostics);
+    if (repairs) {
+      await serviceOrder.repairs().sync(repairs);
+    }
 
-    const repairs = request.input('repairs');
-    await serviceOrder.repairs().sync(repairs);
+    if (diagnostics) {
+      await serviceOrder.diagnostics().sync(diagnostics);
+    }
 
     await serviceOrder.loadMany(['diagnostics', 'repairs']);
     return serviceOrder;
