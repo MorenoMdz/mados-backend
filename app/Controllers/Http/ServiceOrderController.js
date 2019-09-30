@@ -6,6 +6,7 @@
  * Resourceful controller for interacting with serviceorders
  */
 
+const User = use('App/Models/User');
 const ServiceOrder = use('App/Models/ServiceOrder');
 
 class ServiceOrderController {
@@ -18,20 +19,28 @@ class ServiceOrderController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index() {
-    const serviceOrder = await ServiceOrder.query()
+  async index({ auth }) {
+    const user = await User.findOrFail(auth.user.id);
+    await user.load('stores');
+    const stores = user.toJSON().stores.map(store => store.id);
+    // console.log(stores);
+    const serviceOrders = await ServiceOrder.query()
       .with('creator')
       .with('client')
       .with('store')
+      .whereIn('store_id', stores)
       .with('equipment')
       .with('priority')
       .with('osStatus')
       .with('diagStatus')
       .with('repairStatus')
       .with('paymentStatus')
-      // .with('diagnostics')
+      .with('diagnostics')
       .fetch();
-    return serviceOrder;
+    // console.log(
+    //   serviceOrders.toJSON().map(so => ({ so: so.id, store_id: so.store.id }))
+    // );
+    return serviceOrders;
   }
 
   /**

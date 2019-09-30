@@ -44,6 +44,14 @@ class User extends Model {
   serviceOrder() {
     return this.hasMany('App/Models/ServiceOrder');
   }
+
+  system() {
+    return this.belongsTo('App/Models/System');
+  }
+
+  stores() {
+    return this.belongsToMany('App/Models/Store').pivotTable('store_users');
+  }
 }
 
 module.exports = User;

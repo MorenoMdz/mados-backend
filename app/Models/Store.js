@@ -13,6 +13,10 @@ class Store extends Model {
   address() {
     return this.hasOne('App/Models/Address');
   }
+
+  users() {
+    return this.belongsToMany('App/Models/User');
+  }
 }
 
 module.exports = Store;

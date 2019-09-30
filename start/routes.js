@@ -55,9 +55,6 @@ Route.resource('stores', 'StoreController')
 Route.resource('systems', 'SystemController')
   .apiOnly()
   .validator([[['systems.store'], ['System']]]);
-Route.resource('serviceorders', 'ServiceOrderController')
-  .apiOnly()
-  .validator([[['serviceorders.store'], ['Service']]]);
 
 // Store locked routes
 // TODO
@@ -68,4 +65,8 @@ Route.group(() => {
   Route.resource('address', 'AddressController')
     .apiOnly()
     .validator([[['address.store'], ['Address']]]);
-}).middleware(['auth', 'is:(administrator || moderator']);
+  Route.resource('serviceorders', 'ServiceOrderController')
+    .apiOnly()
+    .validator([[['serviceorders.store'], ['Service']]]);
+  // .middleware(['is:(administrator || moderator']);
+}).middleware(['auth']);

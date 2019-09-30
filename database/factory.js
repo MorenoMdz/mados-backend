@@ -67,6 +67,22 @@ Factory.blueprint('App/Models/Client', (faker, i, data = {}) => {
   };
 });
 
+Factory.blueprint('App/Models/System', (faker, i, data = {}) => {
+  return {
+    name: faker.name(),
+    cnpj: '123.123.123-33',
+    email: faker.email(),
+    information: faker.string(),
+    creator_id: async () => {
+      return (await Factory.model('App/Models/User').create()).id;
+    },
+    owner_id: async () => {
+      return (await Factory.model('App/Models/User').create()).id;
+    },
+    ...data,
+  };
+});
+
 Factory.blueprint('App/Models/Diagnostic', (faker, i, data = {}) => {
   return {
     diag_title: faker.string(),
@@ -105,6 +121,9 @@ Factory.blueprint('App/Models/ServiceOrder', (faker, i, data = {}) => {
       return (await Factory.model('App/Models/Client').create()).id;
     },
     store_id: async () => {
+      if (data.store_id) {
+        return data.store_id;
+      }
       return (await Factory.model('App/Models/Store').create()).id;
     },
     equipment_id: async () => {

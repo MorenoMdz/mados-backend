@@ -47,12 +47,14 @@ class UserController {
   }
 
   async update({ params, request }) {
-    const { permissions, roles, ...data } = request.only([
+    const { stores, permissions, roles, ...data } = request.only([
       'username',
       'email',
       'password',
       'permissions',
       'roles',
+      'system_id',
+      'stores',
     ]);
     const user = await User.findOrFail(params.id);
     user.merge(data);
@@ -65,7 +67,12 @@ class UserController {
     if (permissions) {
       await user.permissions().sync(permissions);
     }
-    await user.loadMany(['roles', 'permissions']);
+
+    if (stores) {
+      await user.stores().sync(stores);
+    }
+
+    await user.loadMany(['roles', 'permissions', 'stores']);
     return user;
   }
 

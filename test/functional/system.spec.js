@@ -74,3 +74,15 @@ test('it should not save a new system if validation fails', async ({
     .end();
   response.assertStatus(400);
 });
+
+test('it should add a User to a System', async ({ client }) => {
+  const user = await Factory.model('App/Models/User').create();
+  const system = await Factory.model('App/Models/System').create();
+  const response = await client
+    .put(`/users/${user.id}`)
+    .loginVia(user)
+    .send({ system_id: system.id })
+    .end();
+  response.assertStatus(200);
+  response.assertJSONSubset({ system_id: system.id });
+});
