@@ -5,6 +5,7 @@ Route.get('/', () => {
 });
 // User, Auth & ACL Routes
 Route.get('users', 'UserController.index');
+Route.get('users/:id', 'UserController.show').middleware('auth');
 Route.post('users', 'UserController.store').validator('User');
 Route.put('users/:id', 'UserController.update').middleware('auth');
 // .validator('User') //TODO

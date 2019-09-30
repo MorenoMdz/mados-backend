@@ -35,7 +35,6 @@ test('it should save a file and list all files', async ({ client }) => {
     .post('files')
     .attach('file', Helpers.tmpPath('uploads/testfile.jpeg'))
     .loginVia(user)
-
     .end();
   response.assertStatus(200);
   await Drive.delete(`uploads/${response.body.file}`);

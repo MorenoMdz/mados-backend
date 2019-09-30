@@ -1,4 +1,5 @@
 const File = use('App/Models/File');
+const User = use('App/Models/User');
 const Helpers = use('Helpers');
 
 class FileController {
@@ -7,7 +8,7 @@ class FileController {
     return files;
   }
 
-  async store({ request, response }) {
+  async store({ request, response, auth }) {
     try {
       if (!request.file('file')) return;
 
@@ -16,18 +17,24 @@ class FileController {
         allowedExtensions: ['jpg', 'png', 'jpeg'],
       });
       const fileName = `${Date.now()}.${upload.subtype}`;
+
+      // upload to S3
       await upload.move(Helpers.tmpPath('uploads'), { name: fileName });
 
       if (!upload.moved()) {
         throw upload.error();
       }
-
       const file = await File.create({
         file: fileName,
         name: upload.clientName,
         type: upload.type,
         subtype: upload.subtype,
+        file_path: 'todo',
       });
+      const user = await User.findOrFail(auth.user.id);
+      await user.load('files');
+      const userFiles = user.toJSON().files.map(f => f.id);
+      await user.files().sync([...userFiles, file.id]);
       return file;
     } catch (error) {
       return response

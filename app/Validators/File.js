@@ -7,7 +7,8 @@ class File {
 
   get rules() {
     return {
-      file: 'required',
+      file:
+        'file|required|file_ext:png,gif,jpg,jpeg,bmp|file_size:5mb|file_types:image',
     };
   }
 

@@ -7,6 +7,7 @@ class UserController {
     const user = await User.query()
       .with('permissions')
       .with('roles')
+      .with('files')
       .fetch();
     return user;
   }
@@ -42,12 +43,12 @@ class UserController {
 
   async show({ params }) {
     const user = await User.findOrFail(params.id);
-    // TODO load user orders
+    await user.load('files');
     return user;
   }
 
   async update({ params, request }) {
-    const { stores, permissions, roles, ...data } = request.only([
+    const { files, stores, permissions, roles, ...data } = request.only([
       'username',
       'email',
       'password',
@@ -55,6 +56,8 @@ class UserController {
       'roles',
       'system_id',
       'stores',
+      'file_id',
+      'files',
     ]);
     const user = await User.findOrFail(params.id);
     user.merge(data);
@@ -72,7 +75,16 @@ class UserController {
       await user.stores().sync(stores);
     }
 
-    await user.loadMany(['roles', 'permissions', 'stores']);
+    if (files) {
+      await user.files().sync(files);
+    }
+
+    if (data.password) {
+      user.password = data.password;
+    }
+
+    await user.loadMany(['files', 'roles', 'permissions', 'stores']);
+
     return user;
   }
 

@@ -17,7 +17,7 @@ class User extends Model {
         userInstance.password = await Hash.make(userInstance.password);
       }
     });
-    this.addHook('afterSave', 'NewUserHook.sendServiceOrderEmail');
+    // this.addHook('afterSave', 'NewUserHook.sendServiceOrderEmail'); // TODO
   }
 
   static get traits() {
@@ -44,6 +44,13 @@ class User extends Model {
   serviceOrder() {
     return this.hasMany('App/Models/ServiceOrder');
   }
+
+  files() {
+    return this.belongsToMany('App/Models/File').pivotTable('files_users');
+  }
+  // files() {
+  //   return this.belongsTo('App/Models/File');
+  // }
 
   system() {
     return this.belongsTo('App/Models/System');

@@ -2,8 +2,13 @@ const { test, trait, beforeEach, afterEach } = use('Test/Suite')(
   'User registration'
 );
 const Mail = use('Mail');
+const Hash = use('Hash');
+const Factory = use('Factory');
+const Helpers = use('Helpers');
+const Drive = use('Drive');
 const User = use('App/Models/User');
 
+trait('Auth/Client');
 trait('Test/ApiClient');
 trait('DatabaseTransactions');
 
@@ -16,7 +21,7 @@ afterEach(async () => {
   Mail.restore();
 });
 
-test('should create an User', async ({ client, assert }) => {
+test('it should create an User', async ({ client, assert }) => {
   const response = await client
     .post('/users')
     .send({
@@ -37,7 +42,7 @@ test('should create an User', async ({ client, assert }) => {
   assert.equal(user.toJSON().email, 'm3@m.com');
 });
 
-test('should not create an User if no data is provided', async ({
+test('it should not create an User if no data is provided', async ({
   client,
   assert,
 }) => {
@@ -49,7 +54,7 @@ test('should not create an User if no data is provided', async ({
 });
 
 // todo test user already exists
-test('should not create an User if email is already in use', async ({
+test('it should not create an User if email is already in use', async ({
   client,
 }) => {
   const response = await client
@@ -76,7 +81,7 @@ test('should not create an User if email is already in use', async ({
   responseUser.assertStatus(400);
 });
 
-test('should not create an User if username is already in use', async ({
+test('it should not create an User if username is already in use', async ({
   client,
 }) => {
   const response = await client
@@ -102,6 +107,31 @@ test('should not create an User if username is already in use', async ({
   responseUser.assertStatus(400);
 });
 
-// TODO Should not create an user with insecure password
-// TODO Should update user
+test('it should be able to update an User', async ({ client, assert }) => {
+  const user = await Factory.model('App/Models/User').create();
+
+  const response = await client
+    .post('files')
+    .attach('file', Helpers.tmpPath('uploads/testfile.jpeg'))
+    .loginVia(user)
+    .end();
+  response.assertStatus(200);
+
+  const updateResponse = await client
+    .put(`/users/${user.toJSON().id}`)
+    .send({
+      email: 'm4@m.com',
+      password: '1234',
+      password_confirmation: '1234',
+      files: [response.body.id],
+    })
+    .loginVia(user)
+    .end();
+  assert.equal(updateResponse.body.files[0].id, response.body.id);
+  await user.reload();
+  await Drive.delete(`uploads/${response.body.file}`);
+  assert.isTrue(await Hash.verify('1234', user.password));
+});
+
 // TODO Should create user with roles and perms
+// TODO Should not create an user with insecure password
