@@ -1,7 +1,5 @@
-'use strict'
-
-const Helpers = use('Helpers')
-const Env = use('Env')
+const Helpers = use('Helpers');
+const Env = use('Env');
 
 module.exports = {
   /*
@@ -13,7 +11,7 @@ module.exports = {
   | defining a disk name
   |
   */
-  default: 'local',
+  default: 's3',
 
   disks: {
     /*
@@ -26,7 +24,7 @@ module.exports = {
     */
     local: {
       root: Helpers.tmpPath(),
-      driver: 'local'
+      driver: 'local',
     },
 
     /*
@@ -42,7 +40,7 @@ module.exports = {
       key: Env.get('S3_KEY'),
       secret: Env.get('S3_SECRET'),
       bucket: Env.get('S3_BUCKET'),
-      region: Env.get('S3_REGION')
-    }
-  }
-}
+      region: Env.get('S3_REGION'),
+    },
+  },
+};

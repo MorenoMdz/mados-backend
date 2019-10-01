@@ -1,6 +1,7 @@
 const File = use('App/Models/File');
 const User = use('App/Models/User');
 const Helpers = use('Helpers');
+const Drive = use('Drive');
 
 class FileController {
   async index() {
@@ -10,36 +11,47 @@ class FileController {
 
   async store({ request, response, auth }) {
     try {
-      if (!request.file('file')) return;
+      await request.multipart
+        .file('file', {}, async file => {
+          const ContentType = file.headers['content-type'];
+          const ACL = 'public-read';
+          const Key = `${(Math.random() * 100).toString(32)}-${
+            file.clientName
+          }`;
 
-      const upload = request.file('file', {
-        maxSize: '5mb',
-        allowedExtensions: ['jpg', 'png', 'jpeg'],
-      });
-      const fileName = `${Date.now()}.${upload.subtype}`;
+          const url = await Drive.put(Key, file.stream, {
+            ContentType,
+            ACL,
+          });
 
-      // upload to S3
-      await upload.move(Helpers.tmpPath('uploads'), { name: fileName });
+          const dbFile = await File.create({
+            file: file.clientName,
+            name: Key,
+            type: file.type,
+            subtype: file.subtype,
+            content_type: ContentType,
+            file_path: url,
+          });
 
-      if (!upload.moved()) {
-        throw upload.error();
-      }
-      const file = await File.create({
-        file: fileName,
-        name: upload.clientName,
-        type: upload.type,
-        subtype: upload.subtype,
-        file_path: 'todo',
-      });
-      const user = await User.findOrFail(auth.user.id);
-      await user.load('files');
-      const userFiles = user.toJSON().files.map(f => f.id);
-      await user.files().sync([...userFiles, file.id]);
-      return file;
+          const user = await User.findOrFail(auth.user.id);
+          await user.load('files');
+          const userFiles = user.toJSON().files.map(f => f.id);
+          await user.files().sync([...userFiles, dbFile.id]);
+
+          return response.status(200).send({
+            success: {
+              message: 'File uploaded successfully',
+            },
+          });
+        })
+        .process();
     } catch (error) {
-      return response
-        .status(error.status)
-        .send({ error: { message: 'Upload error' } });
+      return response.status(error.status).send({
+        error: {
+          message: 'Error while uploading the file',
+          err_message: error.message,
+        },
+      });
     }
   }
 
