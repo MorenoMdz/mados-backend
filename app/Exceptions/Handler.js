@@ -45,9 +45,9 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async report(error, { request }) {
-    if (!Env.get('NODE_ENV') === 'testing') {
+    if (Env.get('NODE_ENV') !== 'testing') {
+      Sentry.captureException(error);
       console.log(error);
-      // Sentry.captureException(error);
     }
   }
 }

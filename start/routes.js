@@ -5,11 +5,13 @@ Route.get('/', () => {
 });
 // User, Auth & ACL Routes
 Route.get('users', 'UserController.index');
-Route.get('users/:id', 'UserController.show').middleware('auth');
+Route.get('users/show', 'UserController.show').middleware('auth');
+// Route.get('users/:id', 'UserController.show').middleware('auth');
 Route.post('users', 'UserController.store').validator('User');
 Route.put('users/:id', 'UserController.update').middleware('auth');
 // .validator('User') //TODO
 Route.post('sessions', 'SessionController.store').validator('Session');
+Route.get('sessions', 'SessionController.show').middleware('auth');
 Route.post('forgot', 'ForgotPasswordController.store').validator('Forgot');
 Route.put('forgot', 'ForgotPasswordController.update').validator('Reset');
 Route.resource('permissions', 'PermissionController')

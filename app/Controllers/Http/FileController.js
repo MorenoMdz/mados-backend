@@ -31,6 +31,7 @@ class FileController {
             subtype: file.subtype,
             content_type: ContentType,
             file_path: url,
+            user_id: auth.user.id,
           });
 
           const user = await User.findOrFail(auth.user.id);
@@ -41,6 +42,8 @@ class FileController {
           return response.status(200).send({
             success: {
               message: 'File uploaded successfully',
+              url,
+              id: dbFile.id,
             },
           });
         })
@@ -57,8 +60,12 @@ class FileController {
 
   async show({ params, response }) {
     try {
-      const file = await File.findOrFail(params.id);
-      return response.download(Helpers.tmpPath(`uploads/${file.file}`));
+      const file = await File.findByOrFail('id', params.id);
+      response.implicitEnd = false;
+      response.header('Content-Type', file.content_type);
+      const stream = await Drive.getStream(file.name);
+      stream.pipe(response.response);
+      // return response.download(Helpers.tmpPath(`uploads/${file.file}`));
     } catch (error) {
       return response
         .status(error.status)
@@ -69,8 +76,20 @@ class FileController {
   // async update () {
   // }
 
-  // async destroy () {
-  // }
+  async destroy({ response, params }) {
+    try {
+      const file = await File.findByOrFail('id', params.id);
+      await Drive.delete(file.name);
+      await file.delete();
+      return response
+        .status(200)
+        .send({ success: { message: 'File deleted' } });
+    } catch (error) {
+      return response
+        .status(error.status)
+        .send({ error: { message: 'File deletion error' } });
+    }
+  }
 }
 
 module.exports = FileController;

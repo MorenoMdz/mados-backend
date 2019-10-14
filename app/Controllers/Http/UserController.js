@@ -41,9 +41,10 @@ class UserController {
     return user;
   }
 
-  async show({ params }) {
-    const user = await User.findOrFail(params.id);
-    await user.load('files');
+  async show({ auth }) {
+    // const user = await User.findOrFail(params.id);
+    const user = await await auth.getUser();
+    await user.loadMany(['files', 'roles', 'permissions', 'stores']);
     return user;
   }
 
@@ -58,6 +59,7 @@ class UserController {
       'stores',
       'file_id',
       'files',
+      'avatar_url',
     ]);
     const user = await User.findOrFail(params.id);
     user.merge(data);
