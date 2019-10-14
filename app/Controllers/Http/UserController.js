@@ -41,9 +41,13 @@ class UserController {
     return user;
   }
 
-  async show({ auth }) {
-    // const user = await User.findOrFail(params.id);
-    const user = await await auth.getUser();
+  async show({ auth, params }) {
+    if (params.id) {
+      const user = await User.findOrFail(params.id);
+      await user.loadMany(['files', 'roles', 'permissions', 'stores']);
+      return user;
+    }
+    const user = await auth.getUser();
     await user.loadMany(['files', 'roles', 'permissions', 'stores']);
     return user;
   }
