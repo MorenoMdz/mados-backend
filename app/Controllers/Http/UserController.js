@@ -60,10 +60,12 @@ class UserController {
       'permissions',
       'roles',
       'system_id',
+      'store_id',
       'stores',
       'file_id',
       'files',
       'avatar_url',
+      'phone',
     ]);
     const user = await User.findOrFail(params.id);
     user.merge(data);

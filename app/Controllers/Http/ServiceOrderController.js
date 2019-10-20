@@ -51,7 +51,7 @@ class ServiceOrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, auth }) {
+  async store({ request }) {
     const data = request.only([
       'creator_id',
       'client_id',
@@ -84,19 +84,19 @@ class ServiceOrderController {
 
   async show({ params }) {
     const serviceOrder = await ServiceOrder.findOrFail(params.id);
-    // await serviceOrder.loadMany([
-    //   'creator',
-    //   'client',
-    //   'store',
-    //   'equipment',
-    //   'priority',
-    //   'osStatus',
-    //   'diagStatus',
-    //   'repairStatus',
-    //   'paymentStatus',
-    //   'diagnostics',
-    // ]);
-    await serviceOrder.load('diagnostics');
+    await serviceOrder.loadMany([
+      'creator',
+      'client',
+      'store',
+      'equipment',
+      'priority',
+      'osStatus',
+      'diagStatus',
+      'repairStatus',
+      'paymentStatus',
+      'diagnostics',
+      'repairs',
+    ]);
     // TODO load serviceOrder orders
     return serviceOrder;
   }
