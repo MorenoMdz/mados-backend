@@ -8,8 +8,8 @@ class DiagnosticController {
   }
 
   async store({ request, auth }) {
-    const data = request.only(['diag_title', 'diag_description', 'diag_obs']);
-    data.diag_creator_id = auth.user ? auth.user.id : 1;
+    const data = request.only(['title', 'description', 'obs']);
+    data.creator_id = auth.user ? auth.user.id : 1;
     const diagnostic = await Diagnostic.create({ ...data });
     return diagnostic;
   }

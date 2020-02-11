@@ -69,7 +69,7 @@ test('it should not save a new payment status if validation fail', async ({
 }) => {
   const user = await Factory.model('App/Models/User').create();
   const statusPayload = {
-    diag_title: 'payment_status_title_1',
+    title: 'payment_status_title_1',
   };
   const response = await client
     .post('/paymentstatus')

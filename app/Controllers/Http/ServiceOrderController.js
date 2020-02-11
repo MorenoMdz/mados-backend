@@ -94,10 +94,23 @@ class ServiceOrderController {
       'diagStatus',
       'repairStatus',
       'paymentStatus',
-      'diagnostics',
+      // 'diagnostics',
       'repairs',
     ]);
-    // TODO load serviceOrder orders
+    const diagnostics = (await serviceOrder.diagnostics().fetch()).toJSON();
+    const dates = [];
+    diagnostics.map(diag => {
+      if (!dates.includes(diag.created_at.split(' ')[0])) {
+        dates.push(diag.created_at.split(' ')[0]);
+      }
+      return dates;
+    });
+    const orderedDiagnostics = dates.map(date =>
+      diagnostics.filter(diag => diag.created_at.split(' ')[0] === date)
+    );
+    serviceOrder.diagnostics = orderedDiagnostics;
+    // console.log(dates);
+    console.log(orderedDiagnostics);
     return serviceOrder;
   }
 
@@ -137,7 +150,7 @@ class ServiceOrderController {
     serviceOrder.merge(data);
     await serviceOrder.save();
     const { diagnostics, repairs } = request.only(['diagnostics', 'repairs']);
-
+    // check roles/perms to update each section
     if (repairs) {
       await serviceOrder.repairs().sync(repairs);
     }
@@ -147,11 +160,12 @@ class ServiceOrderController {
     }
 
     await serviceOrder.loadMany(['diagnostics', 'repairs']);
+
     return serviceOrder;
   }
 
   /**
-   * Delete a serviceorder with id.
+   * Delete a service order with id.
    * DELETE serviceorders/:id
    *
    * @param {object} ctx

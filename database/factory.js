@@ -85,9 +85,9 @@ Factory.blueprint('App/Models/System', (faker, i, data = {}) => {
 
 Factory.blueprint('App/Models/Diagnostic', (faker, i, data = {}) => {
   return {
-    diag_title: faker.string(),
-    diag_description: faker.string(),
-    diag_obs: faker.string(),
+    title: faker.string(),
+    description: faker.string(),
+    obs: faker.string(),
     ...data,
   };
 });

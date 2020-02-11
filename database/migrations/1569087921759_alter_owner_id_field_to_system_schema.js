@@ -1,22 +1,26 @@
-
-
 /** @type {import('@adonisjs/lucid/src/Schema')} */
-const Schema = use('Schema')
+const Schema = use('Schema');
 
 class AlterOwnerIdFieldToSystemSchema extends Schema {
-  up () {
-    this.table('systems', (table) => {
+  up() {
+    this.table('diagnostics', table => {
       // alter table
-      table.integer('owner_id').unsigned().references('id').inTable('users').onUpdate('cascade').onDelete('set null').alter()
-    })
+      table.integer('creator_id').alter();
+      table.string('title').alter();
+      table.string('description').alter();
+      table.string('obs').alter();
+    });
   }
 
-  down () {
-    this.table('systems', (table) => {
+  down() {
+    this.table('diagnostics', table => {
       // reverse alternations
-      table.integer('owner_id').alter()
-    })
+      table.integer('diag_creator_id').alter();
+      table.string('diag_title').alter();
+      table.string('diag_description').alter();
+      table.string('diag_obs').alter();
+    });
   }
 }
 
-module.exports = AlterOwnerIdFieldToSystemSchema
+module.exports = AlterOwnerIdFieldToSystemSchema;

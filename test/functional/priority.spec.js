@@ -67,7 +67,7 @@ test('it should not save a new priority if validation fail', async ({
 }) => {
   const user = await Factory.model('App/Models/User').create();
   const statusPayload = {
-    diag_title: 'priority_title_1',
+    title: 'priority_title_1',
   };
   const response = await client
     .post('/priorities')

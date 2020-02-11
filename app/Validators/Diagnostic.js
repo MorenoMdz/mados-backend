@@ -6,8 +6,8 @@ class Diagnostic {
 
   get rules() {
     return {
-      diag_title: 'required',
-      diag_description: 'required',
+      title: 'required',
+      description: 'required',
     };
   }
 

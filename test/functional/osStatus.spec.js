@@ -67,7 +67,7 @@ test('it should not save a new service order status if validation fail', async (
 }) => {
   const user = await Factory.model('App/Models/User').create();
   const statusPayload = {
-    diag_title: 'os_status_title_1',
+    title: 'os_status_title_1',
   };
   const response = await client
     .post('/osstatus')
